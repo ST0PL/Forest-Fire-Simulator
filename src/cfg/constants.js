@@ -1,0 +1,88 @@
+export const SEASONS = {
+  SPRING: 0,
+  SUMMER: 1,
+  AUTUMN: 2,
+  WINTER: 3
+}
+export const STATES = {
+  EMPTY: 0,
+  YOUNG: 1,
+  ADULT: 2,
+  OLD: 3,
+  DEAD: 4,
+  FIRE: 5,
+  ASH: 6,
+}
+
+export const WIND_DIRECTIONS = {
+  N: 0,
+  S: 1,
+  W: 2,
+  E: 3,
+  NW: 4,
+  NE: 5,
+  SW: 6,
+  SE: 7,
+  C: 8
+}
+
+export const WIND_DIRECTION_NAMES = {
+  [WIND_DIRECTIONS.N]: 'Северный',
+  [WIND_DIRECTIONS.S]: 'Южный',
+  [WIND_DIRECTIONS.W]: 'Западный',
+  [WIND_DIRECTIONS.E]: 'Восточный',
+  [WIND_DIRECTIONS.NW]: 'Северо-западный',
+  [WIND_DIRECTIONS.NE]: 'Северо-восточный',
+  [WIND_DIRECTIONS.SW]: 'Юго-западный',
+  [WIND_DIRECTIONS.SE]: 'Юго-восточный',
+  [WIND_DIRECTIONS.C]: 'Штиль',
+}
+
+export const COLORS = {
+  [STATES.EMPTY]: '#222', // пустой участок
+  [STATES.YOUNG]: '#81c784', // молодое дерево
+  [STATES.ADULT]: '#2e7d32', // зрелое дерево
+  [STATES.OLD]: '#1b5e20', // старое дерево
+  [STATES.DEAD]: '#5d4037', // сухостой
+  [STATES.FIRE]: '#d84315', // очаг возгорания
+  [STATES.ASH]: '#757575', // выжженный участок
+};
+
+export const SEASON_NAMES = {
+  [SEASONS.SPRING]: 'Весна 🌸',
+  [SEASONS.SUMMER]: 'Лето ☀️',
+  [SEASONS.AUTUMN]: 'Осень 🍂',
+  [SEASONS.WINTER]: 'Зима ❄️'
+}
+
+export const STATE_NAMES = {
+  [STATES.EMPTY]: 'Пустой участок',
+  [STATES.YOUNG]: 'Молодое дерево',
+  [STATES.ADULT]: 'Зрелое дерево',
+  [STATES.OLD]: 'Старое дерево',
+  [STATES.DEAD]: 'Сухостой',
+  [STATES.FIRE]: 'Очаг возгорания',
+  [STATES.ASH]: 'Выжженный участок',
+};
+
+export const UI_COLORS = {
+  BACKGROUND: '#121212',
+  PANEL_BG: '#1e1e1e',
+  BORDER_SPRING: '#00ffff',
+  BORDER_SUMMER: '#bb86fc',
+  BORDER_AUTUMN: '#ffb74d',
+  TEXT_MOISTURE: '#4caf50',
+  BTN_PAUSE: '#c62828',
+  BTN_START: '#2e7d32',
+  BTN_STEP: '#93ae32',
+  BTN_RESET: '#555',
+  BTN_CLEAR: '#555',
+  BTN_FIRE: '#d84315',
+  BTN_EXTINGUISH: '#1594d8',
+  BTN_DEAD: '#5d4037',
+  BTN_CREATE: '#1cd951',
+  BTN_DELETE: 'red',
+  BTN_SAVE: '#555',
+  BTN_LOAD: '#555',
+  HR_BORDER: '#444'
+};
