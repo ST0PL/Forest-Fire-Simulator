@@ -5,8 +5,8 @@ import { SEASONS, WIND_DIRECTIONS } from "./constants";
 export const SETTINGS = {
   // размеры поля
   FIELD: {
-    WIDTH: 40,
-    HEIGHT: 15,
+    WIDTH: 25,
+    HEIGHT: 25,
     CELL_SIZE: 20 // кол-во пикселей для отрисовки
   },
 
