@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { ForestController } from './core/forest-controller';
 import { COLORS, UI_COLORS, STATE_NAMES, STATES } from './cfg/constants';
 import { SETTINGS } from './cfg/settings';
+import { save, load } from './utils/saveUtils';
 
 
 export default function App() {
@@ -174,6 +175,10 @@ export default function App() {
 
 
       <div style={{ width: '380px', display: 'flex', flexDirection: 'column', gap: '15px' }}>
+        
+        <button onClick={handleSave} style={styles.btn(UI_COLORS.BTN_SAVE)}>Сохранить</button>
+        <button onClick={handleLoad} style={styles.btn(UI_COLORS.BTN_RESET)}>Загрузить</button>
+
         <div style={styles.panel('#00ffff')}>
           <h3 style={styles.h3('#00ffff')}>Показатели среды</h3>
           <p>Сезон: <b>{season}</b></p>

@@ -1,3 +1,5 @@
+import { AdultTree, DeadTree, OldTree, Tree, YoungTree } from "../models";
+
 export const SEASONS = {
   SPRING: 0,
   SUMMER: 1,
@@ -64,6 +66,17 @@ export const STATE_NAMES = {
   [STATES.FIRE]: 'Очаг возгорания',
   [STATES.ASH]: 'Выжженный участок',
 };
+
+// набор функций для создания объектов деревьев после десериализации клеток
+export const CREATE_FUNCTIONS = {
+  [STATES.EMPTY]: (x, y) => new Tree(x, y, STATES.EMPTY),
+  [STATES.YOUNG]: (x, y) => new YoungTree(x, y),
+  [STATES.ADULT]: (x, y) => new AdultTree(x, y),
+  [STATES.OLD]: (x, y) => new OldTree(x, y),
+  [STATES.DEAD]: (x, y) => new DeadTree(x, y),
+  [STATES.FIRE]: (x, y) => new YoungTree(x, y),
+  [STATES.ASH]: (x, y) => new YoungTree(x, y),
+}
 
 export const UI_COLORS = {
   BACKGROUND: '#121212',

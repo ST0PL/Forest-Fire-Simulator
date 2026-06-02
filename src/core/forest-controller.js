@@ -1,7 +1,7 @@
 import { Tree, YoungTree, AdultTree, OldTree, DeadTree } from '../models'
 import { ClimateController } from './climate-controller';
 import { SETTINGS, getRandomInt, round } from '../cfg/settings';
-import { SEASONS, STATES } from '../cfg/constants';
+import { SEASONS, STATES, CREATE_FUNCTIONS } from '../cfg/constants';
 
 export class ForestController {
   constructor(width, height) {
@@ -272,26 +272,9 @@ export class ForestController {
     }
   }
 
+  // интерфейс для создания / удаления деревьев
   createCell(x, y, state) {
-    switch(state) {
-      case STATES.YOUNG:
-        this.cells[y][x] = new YoungTree(x,y)
-        break;
-      case STATES.ADULT:
-        this.cells[y][x] = new AdultTree(x,y)
-        break;
-      case STATES.OLD:
-        this.cells[y][x] = new OldTree(x,y)
-        break;
-      case STATES.DEAD:
-        this.cells[y][x] = new DeadTree(x,y)
-        break;
-      case STATES.EMPTY:
-        this.cells[y][x] = new Tree(x, y, STATES.EMPTY);
-        break;
-      default:
-        break;
-    }
+    this.cells[y][x] = CREATE_FUNCTIONS[state](x, y)
   }
 
   // интерфейс для тушения деревьев
@@ -331,5 +314,15 @@ export class ForestController {
       }
     }
     return { young, adult, old, dead, fire, ash, avgMoisture: totalTrees > 0 ? Math.round(totalMoisture / totalTrees) : 0 };
+  }
+
+  // создание объекта на основе полей модели (т.к. функции при сериализации не сохраняются)
+  static createFromObject(object) {
+    const forestController = new ForestController(object.width, object.height);
+    forestController.tickCount = object.tickCount;
+    forestController.climate = Object.assign(new ClimateController(), object.climate);
+    // восстановление классов клеток матрицы через вложенный map и таблицу функций
+    forestController.cells = object.cells.map(cells => cells.map(cell => Object.assign(CREATE_FUNCTIONS[cell.nativeType](cell.x, cell.y), cell)))
+    return forestController;
   }
 }
