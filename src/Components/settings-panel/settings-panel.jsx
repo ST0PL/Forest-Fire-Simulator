@@ -43,17 +43,16 @@ export default function SettingsPanel({ forestRef, resetHandler, setIsRunningHan
     const applySettings = (newSettings, preventReset) => {
 
         if (newSettings.fieldWidth !== undefined || newSettings.fieldHeight !== undefined) {
-            if(newSettings.fieldWidth === SETTINGS.FIELD.WIDTH && newSettings.fieldHeight === SETTINGS.FIELD.HEIGHT)
-                return;
+            if(!(newSettings.fieldWidth === SETTINGS.FIELD.WIDTH && newSettings.fieldHeight === SETTINGS.FIELD.HEIGHT)) {
+                setIsRunningHandler(false);
 
-            setIsRunningHandler(false);
+                if (newSettings.fieldWidth) SETTINGS.FIELD.WIDTH = newSettings.fieldWidth;
+                if (newSettings.fieldHeight) SETTINGS.FIELD.HEIGHT = newSettings.fieldHeight;
 
-            if (newSettings.fieldWidth) SETTINGS.FIELD.WIDTH = newSettings.fieldWidth;
-            if (newSettings.fieldHeight) SETTINGS.FIELD.HEIGHT = newSettings.fieldHeight;
-
-            // предотвращение лишнего пересоздания контроллеров при загрузке сохраненных настроек
-            if (!preventReset)
-                resetHandler();
+                // предотвращение лишнего пересоздания контроллеров при загрузке сохраненных настроек
+                if (!preventReset)
+                    resetHandler();
+            }
         }
 
         if (newSettings.tickInterval !== undefined) {
