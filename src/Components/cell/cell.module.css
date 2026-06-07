@@ -1,0 +1,12 @@
+.cell {
+  width: calc(var(--cell-size) * 1px);
+  height: calc(var(--cell-size) * 1px);
+  outline-offset: calc(var(--outline-offset) * 1px);
+  
+  background: var(--cell-bg);
+  outline: var(--outline);
+  z-index: var(--z-index);
+  cursor: pointer;
+  
+  transition: background-color 0.1s ease;
+}

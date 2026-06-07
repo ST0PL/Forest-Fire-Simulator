@@ -1,0 +1,26 @@
+.helpContainer {
+    padding: 10px;
+    border-radius: 10px;
+    display: flex;
+    gap: 15px;
+    background: #19202a;
+}
+
+.span {
+  font-size: 14px;
+  color: #ffffff;
+}
+
+
+.innerContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.square {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  background-color: var(--square-bg);
+}

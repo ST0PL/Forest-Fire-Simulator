@@ -1,0 +1,29 @@
+.panel {
+    background-color: #1e1e1e;
+    border: 1px solid #ffb74d;
+}
+
+.propertiesContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.creatorContainer {
+  background: #262626;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.creatorButtonsContainer {
+    margin-top: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px
+}
+
+.empty {
+   color: #888;
+   font-style: italic;
+}

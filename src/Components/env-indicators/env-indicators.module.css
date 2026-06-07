@@ -1,0 +1,12 @@
+.mainContainer {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap; 
+  justify-content: center;
+}
+
+.indicatorContainer {
+  background-color: #151b23;
+  padding: 10px;
+  border-radius: 10px;
+}

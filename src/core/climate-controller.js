@@ -41,10 +41,6 @@ export class ClimateController {
     return this.currentSeasonIndex;
   }
 
-  getWindDirectionName() {
-    return WIND_DIRECTION_NAMES[this.windController.direction];
-  }
-
   isExtremeDroughtActive() {
     return this.extremeDroughtDuration > 0;
   }

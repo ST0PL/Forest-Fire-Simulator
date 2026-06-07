@@ -1,0 +1,4 @@
+.statisticContainer {
+  display: flex;
+  flex-direction: column;
+}

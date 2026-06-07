@@ -316,6 +316,16 @@ export class ForestController {
     return { young, adult, old, dead, fire, ash, avgMoisture: totalTrees > 0 ? Math.round(totalMoisture / totalTrees) : 0 };
   }
 
+  // удаление всех деревьев с поля (превращение в пусте клетки)
+  
+  setEmpty() {
+    for (let y = 0; y < this.height; y++) {
+      for (let x = 0; x < this.width; x++) {
+        this.cells[y][x] = new Tree(x, y, STATES.EMPTY);
+      }
+    }
+  }
+
   // создание объекта на основе полей модели (т.к. функции при сериализации не сохраняются)
   static createFromObject(object) {
     const forestController = new ForestController(object.width, object.height);
