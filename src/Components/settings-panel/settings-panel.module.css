@@ -1,0 +1,33 @@
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #21262d;
+}
+
+.group:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.header {
+  color: #58a6ff;
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.btnReset {
+  width: 100%;
+  margin-top: 4px;
+  font-size: 12px;
+  padding: 8px;
+  opacity: 0.9;
+  transition: opacity 0.2s;
+}
+
+.btnReset:hover {
+  opacity: 1;
+}

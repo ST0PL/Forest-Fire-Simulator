@@ -13,6 +13,7 @@ import Help from './Components/help';
 import PropertiesBlock from './Components/properties-block';
 import StatisticBlock from './Components/statistic-block';
 import EnvironmentIndicators from './Components/env-indicators';
+import SettingsPanel from './Components/settings-panel';
 
 
 export default function App() {
@@ -57,6 +58,13 @@ export default function App() {
 
     <div style={ { display: 'flex', fontFamily: 'monospace', backgroundColor: '#0d1117', color: '#fff', minHeight: '100vh' } }>
 
+      <div style={ { display: 'flex', flexDirection: 'column', gap: '10px', margin: '10px 10px' } }>
+        <SettingsPanel forestRef={forestRef}
+                       isRunning={isRunning}
+                       setIsRunning={setIsRunning}
+                       setTickIntervalHandler={setTickInterval} />
+      </div>
+      
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px', marginTop: '10px', marginBottom: '10px'}}>
 
         <EnvironmentIndicators season={season}

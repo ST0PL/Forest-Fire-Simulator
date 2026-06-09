@@ -1,0 +1,13 @@
+import React, { useState, useEffect } from 'react';
+import styles from './slider.module.css';
+
+export default function Slider( { label, min, max, step, value, onChange } ) {
+    return (
+    <label className={styles.label}>
+        <span>{label}</span>
+        <input type="range"
+               min={min} max={max} step={step}
+               value={value}
+               onChange={onChange} />
+    </label>);
+}
