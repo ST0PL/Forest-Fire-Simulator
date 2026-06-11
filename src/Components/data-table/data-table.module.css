@@ -1,0 +1,48 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+.container > *:first-child {
+    align-self: flex-end;
+}
+
+.tableContainer {
+    background-color: #151b23;
+    border-radius: 10px;
+    max-height: 300px;
+    overflow-y: auto;
+    position: relative;
+    font-size: 14px;
+}
+
+.row {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    width: 100%;
+    align-items: center;
+}
+
+.row > div {
+    padding: 5px;
+    color: #ffffff;
+}
+
+.thead {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background-color: #19202a;
+    font-weight: bold;
+}
+
+.th {
+    cursor: pointer;
+    user-select: none;
+}
+
+.th:hover {
+    background-color: #21262d;
+}

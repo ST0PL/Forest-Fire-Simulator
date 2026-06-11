@@ -14,6 +14,7 @@ import PropertiesBlock from './Components/properties-block';
 import StatisticBlock from './Components/statistic-block';
 import EnvironmentIndicators from './Components/env-indicators';
 import SettingsPanel from './Components/settings-panel';
+import DataTable from './Components/data-table'
 
 
 export default function App() {
@@ -64,7 +65,7 @@ export default function App() {
                        setIsRunning={setIsRunning}
                        setTickIntervalHandler={setTickInterval} />
       </div>
-      
+
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px', marginTop: '10px', marginBottom: '10px'}}>
 
         <EnvironmentIndicators season={season}
@@ -86,6 +87,8 @@ export default function App() {
                       isRunning={isRunning}
                       refreshHandler={refreshGrid} />
         <Help />
+
+        <DataTable cells={forestRef.current.cells} />
 
       </div>
 
