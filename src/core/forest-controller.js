@@ -234,6 +234,27 @@ export class ForestController {
     const deadTreeFactor = deadTreeNeighborsCount > 0 ? SETTINGS.FIRE.DEADTREE_MULTIPLIER : 1.0;
     
     const fireChance = drynessFactor * baseFireChance * deadTreeFactor * spreadMult;
+    const wind = SETTINGS.WIND_ROSE.DIRECTIONS[this.climate.windController.direction];
+    
+
+    // если не штиль (!== undefined)
+    if(wind) {
+      for (let neighbor of fireNeighbors) {
+
+        const dX = cell.x - neighbor.x;
+        const dY = cell.y - neighbor.y;
+
+        // Если расположение соседнего дерева совпадает с направлением ветра относительно горящего
+        if (dX === wind.dx && dY === wind.dy) { 
+          const chance = fireChance * SETTINGS.WIND_ROSE.MULTIPLIER;
+          
+          if (Math.random() < chance) {
+              cell.setFire();
+              return;
+          }
+        }
+      }
+    }
 
     const hasFireNeighbors = fireNeighbors.length > 0;
     const isCriticalDry = cell.moisture < SETTINGS.FIRE.CRITICAL_MOISTURE_THRESHOLD;

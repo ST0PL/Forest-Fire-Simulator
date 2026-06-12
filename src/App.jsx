@@ -7,14 +7,14 @@ import Button from './Components/button';
 import Grid from './Components/grid';
 import Header from './Components/header';
 import Footer from './Components/footer';
+import SettingsPanel from './Components/settings-panel';
 import ControlPanel from './Components/control-panel';
 import Panel from './Components/panel';
 import Help from './Components/help';
+import DataTable from './Components/data-table';
 import PropertiesBlock from './Components/properties-block';
 import StatisticBlock from './Components/statistic-block';
 import EnvironmentIndicators from './Components/env-indicators';
-import SettingsPanel from './Components/settings-panel';
-import DataTable from './Components/data-table'
 
 
 export default function App() {
@@ -24,7 +24,8 @@ export default function App() {
   const [stats, setStats] = useState(forestRef.current.getStats());
   const [isRunning, setIsRunning] = useState(false);
   const [selectedCell, setSelectedCell] = useState(null);
-  const [season, setSeason] = useState(forestRef.current.climate.getSeasonName());;
+  const [season, setSeason] = useState(forestRef.current.climate.getSeasonName());
+  const [wind, setWind] = useState(forestRef.current.climate.getWindDirectionName());
   const [airMoisture, setAirMoisture] = useState(forestRef.current.climate.globalMoisture);
   const [ticks, setTicks] = useState(0);
   const [tickInterval, setTickInterval] = useState(SETTINGS.TIME.TICK_INTERVAL_MS);
@@ -41,6 +42,7 @@ export default function App() {
 
   const handleStep = () => {
       setSeason(forestRef.current.climate.getSeasonName());
+      setWind(forestRef.current.climate.getWindDirectionName());
       setTicks(forestRef.current.tickCount);
       const nextGrid = forestRef.current.tick();
       refreshGrid();
@@ -50,7 +52,7 @@ export default function App() {
     setCells(forestRef.current.cells) // обновляем сетку
     setStats(forestRef.current.getStats()); // обновляем статистику
     setAirMoisture(forestRef.current.climate.globalMoisture); // обновляем показатель влажности
-    setSelectedCell(selectedCell ? forestRef.current.cells[selectedCell.y][selectedCell.x]  : null);
+    setSelectedCell(selectedCell ? forestRef.current.cells[selectedCell.y][selectedCell.x]  :null);
   }
 
   return (
@@ -66,9 +68,11 @@ export default function App() {
                        setTickIntervalHandler={setTickInterval} />
       </div>
 
+
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px', marginTop: '10px', marginBottom: '10px'}}>
 
         <EnvironmentIndicators season={season}
+                               wind={wind}
                                airMoisture={airMoisture}
                                ticks={ticks} />
                                
@@ -82,6 +86,7 @@ export default function App() {
         <ControlPanel forestRef={forestRef}
                       stepHandler={handleStep}
                       setSeasonHandler={setSeason}
+                      setWindHandler={setWind}
                       setTicksHandler={setTicks}
                       setIsRunningHandler={setIsRunning}
                       isRunning={isRunning}

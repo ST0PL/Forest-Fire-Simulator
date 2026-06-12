@@ -1,5 +1,6 @@
 import { SETTINGS, getRandomInt } from '../cfg/settings';
-import { SEASONS, SEASON_NAMES } from '../cfg/constants';
+import { SEASONS, SEASON_NAMES, WIND_DIRECTION_NAMES } from '../cfg/constants';
+import { WindController } from './wind-controller';
 
 export class ClimateController {
   constructor() {
@@ -7,11 +8,13 @@ export class ClimateController {
     this.globalMoisture = 70;
     this.extremeDroughtDurationLimit = 0;
     this.extremeDroughtDuration = 0;
+    this.windController = new WindController();
   }
   
   update(tick) {
     // индекс сезона = (число тиков / длительность сезона) MOD количество сезонов
     this.currentSeasonIndex = Math.floor((tick / SETTINGS.TIME.SEASON_DURATION_TICKS) % Object.keys(SEASONS).length);
+    this.windController.update(this.currentSeasonIndex);
 
     // логика засухи
     if((this.extremeDroughtDuration === 0) && (Math.random() < SETTINGS.CLIMATE.EXTREME_DROUGHT_CHANCE[this.currentSeasonIndex])) {
@@ -39,6 +42,10 @@ export class ClimateController {
 
   getSeasonIndex() {
     return this.currentSeasonIndex;
+  }
+
+  getWindDirectionName() {
+    return WIND_DIRECTION_NAMES[this.windController.direction];
   }
 
   isExtremeDroughtActive() {

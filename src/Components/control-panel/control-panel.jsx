@@ -5,11 +5,12 @@ import { SETTINGS } from '../../cfg/settings';
 import { ForestController } from '../../core/forest-controller';
 import { save, load } from '../../utils/saveUtils';
 
-export default function ControlPanel({ forestRef, stepHandler, setSeasonHandler, setTicksHandler, setIsRunningHandler, isRunning, refreshHandler }) {
+export default function ControlPanel({ forestRef, stepHandler, setSeasonHandler, setWindHandler, setTicksHandler, setIsRunningHandler, isRunning, refreshHandler }) {
 
     const handleReset = () => {
         forestRef.current = new ForestController(SETTINGS.FIELD.WIDTH, SETTINGS.FIELD.HEIGHT);
         setSeasonHandler(forestRef.current.climate.getSeasonName());
+        setWindHandler(forestRef.current.climate.getWindDirectionName());
         setTicksHandler(0);
         setIsRunningHandler(false);
         refreshHandler();
