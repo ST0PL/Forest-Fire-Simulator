@@ -104,6 +104,8 @@ export class ForestController {
           Math.random() < SETTINGS.CLIMATE.WINTER_SNOW_EXTINGUISH_CHANCE) {
             next.state = STATES.ASH;
             next.recoveryTicks = 0;
+            next.stress = 0;
+            next.age = 0;
             continue;
         }
 
@@ -118,8 +120,9 @@ export class ForestController {
           continue;
         }
 
-        // логика пустых/сгоревших участков (регенерация с таймером) ---
-        if (SETTINGS.REGENERATION.REGENERATION_ENABLED && (current.state === STATES.EMPTY || current.state === STATES.ASH)) {
+        // логика пустых/сгоревших участков (регенерация (превращение в пустой участок) с таймером и появление новых деревьев)
+        if (SETTINGS.REGENERATION.REGENERATION_ENABLED) {
+          if(current.state === STATES.ASH) {
             // инкремент таймера восстановления
             if(Math.random() < SETTINGS.REGENERATION.RECOVERY_TICK_CHANCE[seasonIndex] && next.recoveryTicks < SETTINGS.REGENERATION.MIN_RECOVERY_TIME) {
               next.recoveryTicks += 1;
@@ -127,23 +130,27 @@ export class ForestController {
             
             // регенерация возможна только после прохождения минимального времени восстановления
             if (next.recoveryTicks >= SETTINGS.REGENERATION.MIN_RECOVERY_TIME) {
-                
-                const seasonMultiplier = SETTINGS.REGENERATION.SEASON_MULTIPLIERS[seasonIndex];
-                const regenChance = SETTINGS.REGENERATION.BASE_CHANCE_PER_TICK * seasonMultiplier;
-                
-                if (Math.random() < regenChance) {
-                  nextCells[y][x] = new YoungTree(x,y);
-                  continue; 
-                }
+              nextCells[y][x] = new Tree(x, y, STATES.EMPTY);
             }
             continue;
+          }
+
+          // появление новых деревьев
+          else if (current.state === STATES.EMPTY) {
+            const seasonMultiplier = SETTINGS.REGENERATION.SEASON_MULTIPLIERS[seasonIndex];
+            const appearanceChance = SETTINGS.REGENERATION.BASE_CHANCE_PER_TICK * seasonMultiplier;
+            
+            if (Math.random() < appearanceChance) {
+              nextCells[y][x] = new YoungTree(x, y);
+              continue;
+            }
+          }
         }
         
         const neighbors = this.getNeighbors(current);
         const fireNeighbors = neighbors.filter(n => n.state === STATES.FIRE);
         const fireNeighborsCount = fireNeighbors.length;
         const deadTreeNeighborsCount = neighbors.filter(n => n.state === STATES.DEAD).length;
-        const hasFireNeighbor = fireNeighborsCount.length > 0;
 
         // логика живых деревьев
       
@@ -210,9 +217,7 @@ export class ForestController {
               }
           }
         }
-
         // логика воспламенения
-
         if([STATES.EMPTY, STATES.FIRE, STATES.ASH].includes(next.state)) {
           continue;
         }

@@ -29,7 +29,7 @@ export const SETTINGS = {
     WINTER_SNOW_EXTINGUISH_CHANCE: 0.35,
     EXTREME_DROUGHT_CHANCE: {
       [SEASONS.SPRING]: 0.005, // весна
-      [SEASONS.SUMMER]: 0.05, // лето, высокий риск экстремальной засухи
+      [SEASONS.SUMMER]: 0.04, // лето, высокий риск экстремальной засухи
       [SEASONS.AUTUMN]: 0.001, // осень, дождливый сезон, низкая вероятность возникновения засухи
       [SEASONS.WINTER]: 0 // зима
      },

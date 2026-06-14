@@ -29,14 +29,14 @@ export const WIND_DIRECTIONS = {
 }
 
 export const WIND_DIRECTION_NAMES = {
-  [WIND_DIRECTIONS.N]: 'Северный',
-  [WIND_DIRECTIONS.S]: 'Южный',
-  [WIND_DIRECTIONS.W]: 'Западный',
-  [WIND_DIRECTIONS.E]: 'Восточный',
-  [WIND_DIRECTIONS.NW]: 'Северо-западный',
-  [WIND_DIRECTIONS.NE]: 'Северо-восточный',
-  [WIND_DIRECTIONS.SW]: 'Юго-западный',
-  [WIND_DIRECTIONS.SE]: 'Юго-восточный',
+  [WIND_DIRECTIONS.N]: 'Северный ↓',
+  [WIND_DIRECTIONS.S]: 'Южный ↑',
+  [WIND_DIRECTIONS.W]: 'Западный →',
+  [WIND_DIRECTIONS.E]: 'Восточный ←',
+  [WIND_DIRECTIONS.NW]: 'Северо-западный ↘',
+  [WIND_DIRECTIONS.NE]: 'Северо-восточный ↙',
+  [WIND_DIRECTIONS.SW]: 'Юго-западный ↗',
+  [WIND_DIRECTIONS.SE]: 'Юго-восточный ↖',
   [WIND_DIRECTIONS.C]: 'Штиль',
 }
 
