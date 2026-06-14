@@ -6,4 +6,10 @@
   color: var(--btn-fg);
   border: none;
   border-radius: 4px;
+  opacity: 0.9;
+  transition: opacity 0.2s;
+}
+
+.btn:hover {
+  opacity: 1;
 }

@@ -41,7 +41,7 @@ export const WIND_DIRECTION_NAMES = {
 }
 
 export const COLORS = {
-  [STATES.EMPTY]: '#222', // пустой участок
+  [STATES.EMPTY]: '#262626', // пустой участок
   [STATES.YOUNG]: '#81c784', // молодое дерево
   [STATES.ADULT]: '#2e7d32', // зрелое дерево
   [STATES.OLD]: '#1b5e20', // старое дерево

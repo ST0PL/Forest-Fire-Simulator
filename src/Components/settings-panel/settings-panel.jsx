@@ -80,56 +80,60 @@ export default function SettingsPanel({ forestRef, isRunning, setIsRunning, setT
     };
 
     return (
-        <Panel title='Параметры симуляции' color="#79c0ff" style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '16px', fontFamily: 'monospace', fontSize: '13px' }}>
-            <div className={styles.group}>
-                <Slider label={`Скорость: ${values.tickInterval}мс`}
-                        min="50" max="400" step="10"
-                        value={values.tickInterval}
-                        onChange={(e) => applySettings({ tickInterval: Number(e.target.value) })}/>
-            </div>
+        <Panel title='Параметры симуляции' color="#79c0ff"
+               style={{ padding: '16px 10px 10px 3px', display: 'flex', gap: "7px", flexDirection: 'column', fontFamily: 'monospace', fontSize: '13px', width: '280px', height: "585px" }}>
+            <div className={styles.contentContainer}>
+                <div className={styles.group}>
+                    <Slider label={`Скорость: ${values.tickInterval}мс`}
+                            min="50" max="400" step="10"
+                            value={values.tickInterval}
+                            onChange={(e) => applySettings({ tickInterval: Number(e.target.value) })}/>
+                </div>
 
-            <div className={styles.group}>
-                <div className={styles.header}>Пожар</div>
-                <Slider label={`Распространение: ${(values.spreadMultiplier * 100).toFixed(0)}%`}
-                        min="0.1" max="1.0" step="0.05"
-                        value={values.spreadMultiplier}
-                        onChange={(e) => applySettings({ spreadMultiplier: Number(e.target.value) })} />
-                <Slider label={`Крит. влажность: ${values.criticalMoisture}%`}
-                        min="10" max="40" step="1"
-                        value={values.criticalMoisture}
-                        onChange={(e) => applySettings({ criticalMoisture: Number(e.target.value) })} />
-            </div>
+                <div className={styles.group}>
+                    <div className={styles.header}>Пожар</div>
+                    <Slider label={`Распространение: ${(values.spreadMultiplier * 100).toFixed(0)}%`}
+                            min="0.1" max="1.0" step="0.05"
+                            value={values.spreadMultiplier}
+                            onChange={(e) => applySettings({ spreadMultiplier: Number(e.target.value) })} />
+                    <Slider label={`Крит. влажность: ${values.criticalMoisture}%`}
+                            min="10" max="40" step="1"
+                            value={values.criticalMoisture}
+                            onChange={(e) => applySettings({ criticalMoisture: Number(e.target.value) })} />
+                </div>
 
-            <div className={styles.group}>
-                <div className={styles.header}>Климат</div>
-                <Slider label={`Влажность (Лето): ${values.summerHumidity}%`}
-                        min="10" max="60" step="1"
-                        value={values.summerHumidity}
-                        onChange={(e) => applySettings({ summerHumidity: Number(e.target.value) })} />
-                <Slider label={`Риск засухи: ${(values.droughtChance * 100).toFixed(0)}%`}
-                        min="0" max="0.2" step="0.01"
-                        value={values.droughtChance}
-                        onChange={(e) => applySettings({ droughtChance: Number(e.target.value) })} />
-            </div>
+                <div className={styles.group}>
+                    <div className={styles.header}>Климат</div>
+                    <Slider label={`Влажность (Лето): ${values.summerHumidity}%`}
+                            min="10" max="60" step="1"
+                            value={values.summerHumidity}
+                            onChange={(e) => applySettings({ summerHumidity: Number(e.target.value) })} />
+                    <Slider label={`Риск засухи (лето): ${(values.droughtChance * 100).toFixed(0)}%`}
+                            min="0" max="0.2" step="0.01"
+                            value={values.droughtChance}
+                            onChange={(e) => applySettings({ droughtChance: Number(e.target.value) })} />
+                </div>
 
-            <div className={styles.group}>
-                <div className={styles.header}>Экосистема</div>
-                    <Slider label={`Рост семян: ${(values.regenChance * 1000).toFixed(1)}‰`}
-                            min="0.0005" max="0.005" step="0.0005"
-                            value={values.regenChance}
-                            onChange={(e) => applySettings({ regenChance: Number(e.target.value) })} />
-                
-                    <Checkbox label={'Рост деревьев'}
-                            checked={values.growthEnabled}
-                            onChange={(e) => applySettings({ growthEnabled: e.target.checked })} />
+                <div className={styles.group}>
+                    <div className={styles.header}>Экосистема</div>
+                        <Slider label={`Рост семян: ${(values.regenChance * 1000).toFixed(1)}‰`}
+                                min="0.0005" max="0.005" step="0.0005"
+                                value={values.regenChance}
+                                onChange={(e) => applySettings({ regenChance: Number(e.target.value) })} />
                     
-                    <Checkbox label={'Появление новых деревьев'}
-                            checked={values.regenerationEnabled}
-                            onChange={(e) => applySettings({ regenerationEnabled: e.target.checked })} />
+                        <Checkbox label={'Рост деревьев'}
+                                  checked={values.growthEnabled}
+                                  onChange={(e) => applySettings({ growthEnabled: e.target.checked })} />
+                        
+                        <Checkbox label={'Появление новых деревьев'}
+                                  checked={values.regenerationEnabled}
+                                  onChange={(e) => applySettings({ regenerationEnabled: e.target.checked })} />
+                </div>
             </div>
-                <Button onClick={handleReset} 
-                        background={UI_COLORS.BTN_RESET}
-                        className={styles.btnReset}>По умолчанию</Button>
+            <div className={styles.divider} />
+            <Button onClick={handleReset} 
+                    background={UI_COLORS.BTN_RESET}
+                    className={styles.btnReset}>По умолчанию</Button>
         </Panel>
     );
 }

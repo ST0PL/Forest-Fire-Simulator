@@ -49,7 +49,7 @@ export default function App() {
   }
     
   const refreshGrid = () => {
-    setCells(forestRef.current.cells) // обновляем сетку
+    setCells([...forestRef.current.cells]); // обновляем сетку
     setStats(forestRef.current.getStats()); // обновляем статистику
     setAirMoisture(forestRef.current.climate.globalMoisture); // обновляем показатель влажности
     setSelectedCell(selectedCell ? forestRef.current.cells[selectedCell.y][selectedCell.x]  :null);

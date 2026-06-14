@@ -1,19 +1,18 @@
 .label {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
+    flex-direction: column;
+    gap: 10px;
     cursor: pointer;
     user-select: none;
 }
 
 .label span {
     color: #8b949e;
-    white-space: nowrap;
+    text-align: start;
 }
 
 input[type="range"] {
-  width: 120px;
+  width: 99%;
   height: 4px;
   background: #30363d;
   border-radius: 2px;
