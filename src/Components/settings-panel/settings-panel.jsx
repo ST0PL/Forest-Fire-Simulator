@@ -8,32 +8,82 @@ import Checkbox from '../checkBox';
 import Panel from '../panel';
 
 const DEFAULTS = {
+    fieldWidth: SETTINGS.FIELD.WIDTH,
+    fieldHeight: SETTINGS.FIELD.HEIGHT,
     tickInterval: SETTINGS.TIME.TICK_INTERVAL_MS,
+    burnDuration: SETTINGS.FIRE.BURN_DURATION_TICKS,
     spreadMultiplier: SETTINGS.FIRE.SPREAD_MULTIPLIER,
     criticalMoisture: SETTINGS.FIRE.CRITICAL_MOISTURE_THRESHOLD,
+    springHumidity: SETTINGS.CLIMATE.HUMIDITY[SEASONS.SPRING],
     summerHumidity: SETTINGS.CLIMATE.HUMIDITY[SEASONS.SUMMER],
-    droughtChance: SETTINGS.CLIMATE.EXTREME_DROUGHT_CHANCE[SEASONS.SUMMER],
+    autumnHumidity: SETTINGS.CLIMATE.HUMIDITY[SEASONS.AUTUMN],
+    winterHumidity: SETTINGS.CLIMATE.HUMIDITY[SEASONS.WINTER],
+    windDurationThreshold: SETTINGS.WIND_ROSE.DURATION_THRESHOLD,
+    windMultiplier: SETTINGS.WIND_ROSE.MULTIPLIER,
+    springDroughtChance: SETTINGS.CLIMATE.EXTREME_DROUGHT_CHANCE[SEASONS.SPRING],
+    summerDroughtChance: SETTINGS.CLIMATE.EXTREME_DROUGHT_CHANCE[SEASONS.SUMMER],
+    autumnDroughtChance: SETTINGS.CLIMATE.EXTREME_DROUGHT_CHANCE[SEASONS.AUTUMN],
+    droughtThreshold: SETTINGS.CLIMATE.EXTREME_DROUGHT_DURATION_THRESHOLD,
+    stressAccumulationRate: SETTINGS.OLD_TREE.STRESS_ACCUMULATION_RATE,
+    stressEvaporateRate: SETTINGS.OLD_TREE.STRESS_EVAPORATE_RATE,
+    heatStressThreshold: SETTINGS.OLD_TREE.HEAT_STRESS_THRESHOLD,
+    stressChance: SETTINGS.OLD_TREE.STRESS_CHANCE,
+    seasonDuration: SETTINGS.CLIMATE.SEASON_DURATION_TICKS,
     regenChance: SETTINGS.REGENERATION.BASE_CHANCE_PER_TICK,
     growthEnabled: SETTINGS.GROWTH.GROWTH_ENABLED,
     regenerationEnabled: SETTINGS.REGENERATION.REGENERATION_ENABLED,
 };
 
-export default function SettingsPanel({ forestRef, isRunning, setIsRunning, setTickIntervalHandler }) {
+export default function SettingsPanel({ forestRef, resetHandler, setIsRunningHandler, setTickIntervalHandler }) {
 
   
     const [values, setValues] = useState({ ...DEFAULTS });
 
     // применение параметров (изменение данных в SETTINGS, обновление ui панели и сохранение в локальное хранилище)
-    const applySettings = (newSettings) => {
+    const applySettings = (newSettings, preventReset) => {
+
+        if (newSettings.fieldWidth !== undefined || newSettings.fieldHeight !== undefined) {
+            if(newSettings.fieldWidth === SETTINGS.FIELD.WIDTH && newSettings.fieldHeight === SETTINGS.FIELD.HEIGHT)
+                return;
+
+            setIsRunningHandler(false);
+
+            if (newSettings.fieldWidth) SETTINGS.FIELD.WIDTH = newSettings.fieldWidth;
+            if (newSettings.fieldHeight) SETTINGS.FIELD.HEIGHT = newSettings.fieldHeight;
+
+            // предотвращение лишнего пересоздания контроллеров при загрузке сохраненных настроек
+            if (!preventReset)
+                resetHandler();
+        }
 
         if (newSettings.tickInterval !== undefined) {
             SETTINGS.TIME.TICK_INTERVAL_MS = newSettings.tickInterval;
             setTickIntervalHandler(SETTINGS.TIME.TICK_INTERVAL_MS);
         }
+        
+        if (newSettings.burnDuration !== undefined) SETTINGS.FIRE.BURN_DURATION_TICKS = newSettings.burnDuration;
         if (newSettings.spreadMultiplier !== undefined) SETTINGS.FIRE.SPREAD_MULTIPLIER = newSettings.spreadMultiplier;
         if (newSettings.criticalMoisture !== undefined) SETTINGS.FIRE.CRITICAL_MOISTURE_THRESHOLD = newSettings.criticalMoisture;
+        
+        if (newSettings.springHumidity !== undefined) SETTINGS.CLIMATE.HUMIDITY[SEASONS.SPRING] = newSettings.springHumidity;
         if (newSettings.summerHumidity !== undefined) SETTINGS.CLIMATE.HUMIDITY[SEASONS.SUMMER] = newSettings.summerHumidity;
-        if (newSettings.droughtChance !== undefined) SETTINGS.CLIMATE.EXTREME_DROUGHT_CHANCE[SEASONS.SUMMER] = newSettings.droughtChance;
+        if (newSettings.autumnHumidity !== undefined) SETTINGS.CLIMATE.HUMIDITY[SEASONS.AUTUMN] = newSettings.autumnHumidity;
+        if (newSettings.winterHumidity !== undefined) SETTINGS.CLIMATE.HUMIDITY[SEASONS.WINTER] = newSettings.winterHumidity;
+
+        if (newSettings.windDurationThreshold !== undefined) SETTINGS.WIND_ROSE.DURATION_THRESHOLD = newSettings.windDurationThreshold;
+        if (newSettings.windMultiplier !== undefined) SETTINGS.WIND_ROSE.MULTIPLIER = newSettings.windMultiplier;
+
+        if (newSettings.springDroughtChance !== undefined) SETTINGS.CLIMATE.EXTREME_DROUGHT_CHANCE[SEASONS.SPRING] = newSettings.springDroughtChance;
+        if (newSettings.summerDroughtChance !== undefined) SETTINGS.CLIMATE.EXTREME_DROUGHT_CHANCE[SEASONS.SUMMER] = newSettings.summerDroughtChance;
+        if (newSettings.autumnDroughtChance !== undefined) SETTINGS.CLIMATE.EXTREME_DROUGHT_CHANCE[SEASONS.AUTUMN] = newSettings.autumnDroughtChance;
+
+        if(newSettings.stressAccumulationRate !== undefined) SETTINGS.OLD_TREE.STRESS_ACCUMULATION_RATE = newSettings.stressAccumulationRate;
+        if(newSettings.stressEvaporateRate !== undefined) SETTINGS.OLD_TREE.STRESS_EVAPORATE_RATE = newSettings.stressEvaporateRate;
+        if(newSettings.heatStressThreshold !== undefined) SETTINGS.OLD_TREE.HEAT_STRESS_THRESHOLD = newSettings.heatStressThreshold;
+        if(newSettings.stressChance !== undefined) SETTINGS.OLD_TREE.STRESS_CHANCE = newSettings.stressChance;
+
+        if (newSettings.droughtThreshold !== undefined) SETTINGS.CLIMATE.EXTREME_DROUGHT_DURATION_THRESHOLD = newSettings.droughtThreshold;
+        if (newSettings.seasonDuration !== undefined) SETTINGS.CLIMATE.SEASON_DURATION_TICKS = newSettings.seasonDuration;
         if (newSettings.regenChance !== undefined) SETTINGS.REGENERATION.BASE_CHANCE_PER_TICK = newSettings.regenChance;
         if (newSettings.growthEnabled !== undefined) SETTINGS.GROWTH.GROWTH_ENABLED = newSettings.growthEnabled;
         if (newSettings.regenerationEnabled !== undefined) SETTINGS.REGENERATION.REGENERATION_ENABLED = newSettings.regenerationEnabled;
@@ -54,14 +104,14 @@ export default function SettingsPanel({ forestRef, isRunning, setIsRunning, setT
         if (saved) {
         try {
             const parsed = JSON.parse(saved);
-            applySettings(parsed);
+            applySettings(parsed, true);
         } catch (e) {
             console.error('При загрузке настроек произошла ошибка', e);
         }
         } 
         else {
             // если сохранения нет, берутся настройки по умолчанию
-            applySettings(DEFAULTS);
+            applySettings(DEFAULTS, true);
         }
     }, []);
 
@@ -84,7 +134,15 @@ export default function SettingsPanel({ forestRef, isRunning, setIsRunning, setT
                style={{ padding: '16px 10px 10px 3px', display: 'flex', gap: "7px", flexDirection: 'column', fontFamily: 'monospace', fontSize: '13px', width: '280px', height: "585px" }}>
             <div className={styles.contentContainer}>
                 <div className={styles.group}>
-                    <Slider label={`Скорость: ${values.tickInterval}мс`}
+                    <Slider label={`Ширина: ${values.fieldWidth}`}
+                            min="1" max="40" step="1"
+                            value={values.fieldWidth}
+                            onChange={(e) => applySettings({ fieldWidth: Number(e.target.value) })}/>
+                    <Slider label={`Высота: ${values.fieldHeight}`}
+                            min="1" max="15" step="1"
+                            value={values.fieldHeight}
+                            onChange={(e) => applySettings({ fieldHeight: Number(e.target.value) })}/>
+                    <Slider label={`Скорость: ${values.tickInterval} мс`}
                             min="50" max="400" step="10"
                             value={values.tickInterval}
                             onChange={(e) => applySettings({ tickInterval: Number(e.target.value) })}/>
@@ -92,35 +150,103 @@ export default function SettingsPanel({ forestRef, isRunning, setIsRunning, setT
 
                 <div className={styles.group}>
                     <div className={styles.header}>Пожар</div>
+                    <Slider label={`Длительность горения: ${values.burnDuration} тиков`}
+                            min="1" max="5" step="1"
+                            value={values.burnDuration}
+                            onChange={(e) => applySettings({ burnDuration: Number(e.target.value) })} />
                     <Slider label={`Распространение: ${(values.spreadMultiplier * 100).toFixed(0)}%`}
                             min="0.1" max="1.0" step="0.05"
                             value={values.spreadMultiplier}
                             onChange={(e) => applySettings({ spreadMultiplier: Number(e.target.value) })} />
-                    <Slider label={`Крит. влажность: ${values.criticalMoisture}%`}
+                    <Slider label={`Порог влажности: ${values.criticalMoisture}%`}
                             min="10" max="40" step="1"
                             value={values.criticalMoisture}
                             onChange={(e) => applySettings({ criticalMoisture: Number(e.target.value) })} />
                 </div>
 
                 <div className={styles.group}>
-                    <div className={styles.header}>Климат</div>
-                    <Slider label={`Влажность (Лето): ${values.summerHumidity}%`}
-                            min="10" max="60" step="1"
+                    <div className={styles.header}>Влажность</div>
+                    <Slider label={`Весна: ${values.springHumidity}%`}
+                            min="10" max="100" step="1"
+                            value={values.springHumidity}
+                            onChange={(e) => applySettings({ springHumidity: Number(e.target.value) })} />
+                    <Slider label={`Лето: ${values.summerHumidity}%`}
+                            min="10" max="100" step="1"
                             value={values.summerHumidity}
                             onChange={(e) => applySettings({ summerHumidity: Number(e.target.value) })} />
-                    <Slider label={`Риск засухи (лето): ${(values.droughtChance * 100).toFixed(0)}%`}
-                            min="0" max="0.2" step="0.01"
-                            value={values.droughtChance}
-                            onChange={(e) => applySettings({ droughtChance: Number(e.target.value) })} />
+                    <Slider label={`Осень: ${values.autumnHumidity}%`}
+                            min="10" max="100" step="1"
+                            value={values.autumnHumidity}
+                            onChange={(e) => applySettings({ autumnHumidity: Number(e.target.value) })} />
+                    <Slider label={`Зима: ${values.winterHumidity}%`}
+                            min="10" max="100" step="1"
+                            value={values.winterHumidity}
+                            onChange={(e) => applySettings({ winterHumidity: Number(e.target.value) })} />
+                </div>
+
+                
+                <div className={styles.group}>
+                    <div className={styles.header}>Ветер</div>
+                    <Slider label={`Максимальная длительность: ${values.windDurationThreshold} тиков`}
+                            min="1" max="50" step="1"
+                            value={values.windDurationThreshold}
+                            onChange={(e) => applySettings({ windDurationThreshold: Number(e.target.value) })} />
+                    <Slider label={`Сила переноса пламени: ${values.windMultiplier.toFixed(1)} ед.`}
+                            min="1" max="5" step="0.1"
+                            value={values.windMultiplier}
+                            onChange={(e) => applySettings({ windMultiplier: Number(e.target.value) })} />
+                </div>
+
+                <div className={styles.group}>
+                    <div className={styles.header}>Засуха</div>
+                    <Slider label={`Риск засухи (весна): ${(values.springDroughtChance * 100).toFixed(1)}‰`}
+                            min="0" max="0.10" step="0.001"
+                            value={values.springDroughtChance}
+                            onChange={(e) => applySettings({ springDroughtChance: Number(e.target.value) })} />
+                    <Slider label={`Риск засухи (лето): ${(values.summerDroughtChance * 100).toFixed(1)}‰`}
+                            min="0" max="0.10" step="0.001"
+                            value={values.summerDroughtChance}
+                            onChange={(e) => applySettings({ summerDroughtChance: Number(e.target.value) })} />
+                    <Slider label={`Риск засухи (осень): ${(values.autumnDroughtChance * 100).toFixed(1)}‰`}
+                            min="0" max="0.10" step="0.001"
+                            value={values.autumnDroughtChance}
+                            onChange={(e) => applySettings({ autumnDroughtChance: Number(e.target.value) })} />
+                    <Slider label={`Максимальная длительность: ${values.droughtThreshold} тиков`}
+                            min="0" max="40" step="1"
+                            value={values.droughtThreshold}
+                            onChange={(e) => applySettings({ droughtThreshold: Number(e.target.value) })} />
+                </div>
+
+                <div className={styles.group}>
+                    <div className={styles.header}>Гидравлический стресс</div>
+                    <Slider label={`Накопление стресса: ${(values.stressAccumulationRate).toFixed(2)} ед./тик`}
+                            min="0" max="2" step="0.01"
+                            value={values.stressAccumulationRate}
+                            onChange={(e) => applySettings({ stressAccumulationRate: Number(e.target.value) })} />
+                    <Slider label={`Снижение стресса: ${(values.stressEvaporateRate).toFixed(2)} ед./тик`}
+                            min="0" max="2" step="0.01"
+                            value={values.stressEvaporateRate}
+                            onChange={(e) => applySettings({ stressEvaporateRate: Number(e.target.value) })} />
+                    <Slider label={`Порог для засыхания: ${(values.heatStressThreshold).toFixed(2)} ед.`}
+                            min="0" max="30" step="0.01"
+                            value={values.heatStressThreshold}
+                            onChange={(e) => applySettings({ heatStressThreshold: Number(e.target.value) })} />
+                    <Slider label={`Шанс получения ед. стресса: ${(values.stressChance*100).toFixed(0)}%`}
+                            min="0" max="1" step="0.01"
+                            value={values.stressChance}
+                            onChange={(e) => applySettings({ stressChance: Number(e.target.value) })} />
                 </div>
 
                 <div className={styles.group}>
                     <div className={styles.header}>Экосистема</div>
-                        <Slider label={`Рост семян: ${(values.regenChance * 1000).toFixed(1)}‰`}
+                        <Slider label={`Длительность сезона: ${(values.seasonDuration)} тиков`}
+                                min="1" max="90" step="1"
+                                value={values.seasonDuration}
+                                onChange={(e) => applySettings({ seasonDuration: Number(e.target.value) })} />
+                        <Slider label={`Базовый шанс появления дерева: ${(values.regenChance * 1000).toFixed(1)}‰`}
                                 min="0.0005" max="0.005" step="0.0005"
                                 value={values.regenChance}
                                 onChange={(e) => applySettings({ regenChance: Number(e.target.value) })} />
-                    
                         <Checkbox label={'Рост деревьев'}
                                   checked={values.growthEnabled}
                                   onChange={(e) => applySettings({ growthEnabled: e.target.checked })} />

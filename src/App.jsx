@@ -38,8 +38,6 @@ export default function App() {
     return () => clearInterval(timer);
   }, [isRunning, selectedCell, tickInterval]);
 
-
-
   const handleStep = () => {
       setSeason(forestRef.current.climate.getSeasonName());
       setWind(forestRef.current.climate.getWindDirectionName());
@@ -55,6 +53,15 @@ export default function App() {
     setSelectedCell(selectedCell ? forestRef.current.cells[selectedCell.y][selectedCell.x]  :null);
   }
 
+  const handleReset = () => {
+      forestRef.current = new ForestController(SETTINGS.FIELD.WIDTH, SETTINGS.FIELD.HEIGHT);
+      setSeason(forestRef.current.climate.getSeasonName());
+      setWind(forestRef.current.climate.getWindDirectionName());
+      setTicks(0);
+      setIsRunning(false);
+      refreshGrid();
+  };
+
   return (
     <>
     <Header/>
@@ -63,8 +70,8 @@ export default function App() {
 
       <div style={ { display: 'flex', flexDirection: 'column', gap: '10px', margin: '10px 10px' } }>
         <SettingsPanel forestRef={forestRef}
-                       isRunning={isRunning}
-                       setIsRunning={setIsRunning}
+                       resetHandler={handleReset}
+                       setIsRunningHandler={setIsRunning}
                        setTickIntervalHandler={setTickInterval} />
       </div>
 
@@ -76,14 +83,13 @@ export default function App() {
                                airMoisture={airMoisture}
                                ticks={ticks} />
                                
-        <Grid width={SETTINGS.FIELD.WIDTH}
-              cellSize={SETTINGS.FIELD.CELL_SIZE}
-              selectedCell={selectedCell}
+        <Grid selectedCell={selectedCell}
               setCellHandler={setSelectedCell}
               cells={cells} />
 
 
         <ControlPanel forestRef={forestRef}
+                      resetHandler={handleReset}
                       stepHandler={handleStep}
                       setSeasonHandler={setSeason}
                       setWindHandler={setWind}

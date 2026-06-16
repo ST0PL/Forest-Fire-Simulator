@@ -111,7 +111,7 @@ export class ForestController {
 
         if (current.state === STATES.FIRE) {
           next.burnDuration++;
-          if (next.burnDuration >= SETTINGS.TIME.BURN_DURATION_TICKS) {
+          if (next.burnDuration >= SETTINGS.FIRE.BURN_DURATION_TICKS) {
             next.state = STATES.ASH;
             next.recoveryTicks = 0;
             next.stress = 0;

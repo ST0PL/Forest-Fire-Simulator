@@ -5,16 +5,7 @@ import { SETTINGS } from '../../cfg/settings';
 import { ForestController } from '../../core/forest-controller';
 import { save, load } from '../../utils/saveUtils';
 
-export default function ControlPanel({ forestRef, stepHandler, setSeasonHandler, setWindHandler, setTicksHandler, setIsRunningHandler, isRunning, refreshHandler }) {
-
-    const handleReset = () => {
-        forestRef.current = new ForestController(SETTINGS.FIELD.WIDTH, SETTINGS.FIELD.HEIGHT);
-        setSeasonHandler(forestRef.current.climate.getSeasonName());
-        setWindHandler(forestRef.current.climate.getWindDirectionName());
-        setTicksHandler(0);
-        setIsRunningHandler(false);
-        refreshHandler();
-    };
+export default function ControlPanel({ forestRef, resetHandler, stepHandler, setSeasonHandler, setWindHandler, setTicksHandler, setIsRunningHandler, isRunning, refreshHandler }) {
 
     const handleClear = () => {
         forestRef.current.setEmpty();
@@ -45,7 +36,7 @@ export default function ControlPanel({ forestRef, stepHandler, setSeasonHandler,
             <Button onClick={() => setIsRunningHandler(!isRunning)} background={isRunning ? UI_COLORS.BTN_PAUSE : UI_COLORS.BTN_START}>
                 {isRunning ? 'Пауза' : 'Старт'}
             </Button>
-            <Button onClick={handleReset} background={UI_COLORS.BTN_RESET}>Сброс состояния</Button>
+            <Button onClick={resetHandler} background={UI_COLORS.BTN_RESET}>Сброс состояния</Button>
             <Button onClick={handleClear} background={UI_COLORS.BTN_CLEAR}>Очистка поля</Button>
             <Button onClick={handleSave} background={UI_COLORS.BTN_SAVE}>Сохранить</Button>
             <Button onClick={handleLoad} background={UI_COLORS.BTN_RESET}>Загрузить</Button>

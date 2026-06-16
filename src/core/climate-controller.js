@@ -13,7 +13,7 @@ export class ClimateController {
   
   update(tick) {
     // индекс сезона = (число тиков / длительность сезона) MOD количество сезонов
-    this.currentSeasonIndex = Math.floor((tick / SETTINGS.TIME.SEASON_DURATION_TICKS) % Object.keys(SEASONS).length);
+    this.currentSeasonIndex = Math.floor((tick / SETTINGS.CLIMATE.SEASON_DURATION_TICKS) % Object.keys(SEASONS).length);
     this.windController.update(this.currentSeasonIndex);
 
     // логика засухи
