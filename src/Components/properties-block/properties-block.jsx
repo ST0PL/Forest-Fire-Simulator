@@ -34,7 +34,7 @@ export default function PropertiesBlock( { forestRef, selectedCell, refreshHandl
                 <p>Состояние: <b style={{ color: COLORS[selectedCell.state] }}>{STATE_NAMES[selectedCell.state]}</b></p>
                 {[STATES.EMPTY, STATES.DEAD].includes(selectedCell.state) ? null : <p>Влага: <b style={{ color: '#4caf50' }}>{selectedCell.moisture}%</b></p>}
                 {[STATES.OLD].includes(selectedCell.state) ? <p>Гидравлический стресс: {selectedCell.stress}</p> : null}
-                {[STATES.EMPTY, STATES.DEAD].includes(selectedCell.state) ? null : <p>Возраст: {selectedCell.age} шагов</p> }
+                {[STATES.EMPTY, STATES.DEAD, STATES.FIRE, STATES.ASH].includes(selectedCell.state) ? null : <p>Возраст: {selectedCell.age} шагов</p> }
                 {[STATES.EMPTY, STATES.FIRE, STATES.ASH].includes(selectedCell.state) ? null : <Button onClick={handleSetFire} background={UI_COLORS.BTN_FIRE}>Поджечь</Button>}
                 {selectedCell.state === STATES.FIRE ? <Button onClick={handleExtinguish} background={UI_COLORS.BTN_EXTINGUISH}>Потушить</Button> : null}
                 {[STATES.EMPTY, STATES.DEAD, STATES.FIRE, STATES.ASH].includes(selectedCell.state) ? null : <Button onClick={handleSetDead} background={UI_COLORS.BTN_DEAD}>Превратить в сухостой</Button>}

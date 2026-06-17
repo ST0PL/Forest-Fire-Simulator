@@ -30,6 +30,8 @@ const DEFAULTS = {
     stressChance: SETTINGS.OLD_TREE.STRESS_CHANCE,
     seasonDuration: SETTINGS.CLIMATE.SEASON_DURATION_TICKS,
     regenChance: SETTINGS.REGENERATION.BASE_CHANCE_PER_TICK,
+    youngToAdultAge: SETTINGS.GROWTH.YOUNG_TO_ADULT_AGE,
+    adultToOldAge: SETTINGS.GROWTH.ADULT_TO_OLD_AGE,
     growthEnabled: SETTINGS.GROWTH.GROWTH_ENABLED,
     regenerationEnabled: SETTINGS.REGENERATION.REGENERATION_ENABLED,
 };
@@ -83,8 +85,12 @@ export default function SettingsPanel({ forestRef, resetHandler, setIsRunningHan
 
         if (newSettings.droughtThreshold !== undefined) SETTINGS.CLIMATE.EXTREME_DROUGHT_DURATION_THRESHOLD = newSettings.droughtThreshold;
         if (newSettings.seasonDuration !== undefined) SETTINGS.CLIMATE.SEASON_DURATION_TICKS = newSettings.seasonDuration;
-        if (newSettings.regenChance !== undefined) SETTINGS.REGENERATION.BASE_CHANCE_PER_TICK = newSettings.regenChance;
+        
         if (newSettings.growthEnabled !== undefined) SETTINGS.GROWTH.GROWTH_ENABLED = newSettings.growthEnabled;
+        if (newSettings.youngToAdultAge !== undefined) SETTINGS.GROWTH.YOUNG_TO_ADULT_AGE = newSettings.youngToAdultAge;
+        if (newSettings.adultToOldAge !== undefined) SETTINGS.GROWTH.ADULT_TO_OLD_AGE = newSettings.adultToOldAge;
+
+        if (newSettings.regenChance !== undefined) SETTINGS.REGENERATION.BASE_CHANCE_PER_TICK = newSettings.regenChance;
         if (newSettings.regenerationEnabled !== undefined) SETTINGS.REGENERATION.REGENERATION_ENABLED = newSettings.regenerationEnabled;
 
         // наложение новых параметров на существующие
@@ -249,7 +255,16 @@ export default function SettingsPanel({ forestRef, resetHandler, setIsRunningHan
                         <Checkbox label={'Рост деревьев'}
                                   checked={values.growthEnabled}
                                   onChange={(e) => applySettings({ growthEnabled: e.target.checked })} />
-                        
+                        <Slider label={`Период роста до зрелого: ${values.youngToAdultAge} тиков`}
+                                min="1" max="5000" step="1"
+                                value={values.youngToAdultAge}
+                                disabled={!values.growthEnabled}
+                                onChange={(e) => applySettings({ youngToAdultAge: Number(e.target.value) })} />
+                        <Slider label={`Период роста до старого: ${values.adultToOldAge} тиков`}
+                                min="1" max="5000" step="1"
+                                value={values.adultToOldAge}
+                                onChange={(e) => applySettings({ adultToOldAge: Number(e.target.value) })}
+                                disabled={!values.growthEnabled} />
                         <Checkbox label={'Появление новых деревьев'}
                                   checked={values.regenerationEnabled}
                                   onChange={(e) => applySettings({ regenerationEnabled: e.target.checked })} />

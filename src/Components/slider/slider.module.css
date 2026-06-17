@@ -57,6 +57,14 @@ input[type="range"]::-moz-range-thumb:hover {
   background: #79c0ff;
 }
 
+.label:has(input[type="range"]:disabled) {
+  opacity: 0.5;
+}
+
+input[type="range"]:disabled {
+  opacity: 0.5;
+}
+
 input[type="range"]::-moz-range-track {
   background: transparent;
   border: none;
