@@ -238,6 +238,7 @@ export class ForestController {
     const spreadMult = SETTINGS.FIRE.SPREAD_MULTIPLIER;
     const deadTreeFactor = deadTreeNeighborsCount > 0 ? SETTINGS.FIRE.DEADTREE_MULTIPLIER : 1.0;
     
+    // вероятность поспламенения (от случайного источника - "сухие грозы")
     const fireChance = drynessFactor * baseFireChance * deadTreeFactor * spreadMult;
     const wind = SETTINGS.WIND_ROSE.DIRECTIONS[this.climate.windController.direction];
     
