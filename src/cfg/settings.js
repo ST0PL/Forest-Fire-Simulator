@@ -22,7 +22,7 @@ export const SETTINGS = {
       [SEASONS.SPRING]: 75, // весна
       [SEASONS.SUMMER]: 20, // лето, засуха, высокий риск пожара
       [SEASONS.AUTUMN]: 90, // осень, дожди, низкий риск пожара
-      [SEASONS.WINTER]: 15 // зима
+      [SEASONS.WINTER]: 30 // зима
     },
     // зимой есть вероятность, что снег потушит огонь за один тик
     WINTER_SNOW_EXTINGUISH_CHANCE: 0.35,
@@ -55,7 +55,7 @@ export const SETTINGS = {
   // параметры воспламенения
   FIRE: {
     BURN_DURATION_TICKS: 3, // кол-во тиков на горение дерева до превращения в пепел
-    SPREAD_MULTIPLIER: 0.25,  // общий множитель шанса возгорания
+    SPREAD_MULTIPLIER: 0.30,  // общий множитель шанса возгорания
     CRITICAL_MOISTURE_THRESHOLD: 10, // если влажность дерева < этого, то летом дерево может самовозгореться
     DEADTREE_MULTIPLIER: 2.0, // вклад сухостоя в воспламенение (тепловой проводник)
   },

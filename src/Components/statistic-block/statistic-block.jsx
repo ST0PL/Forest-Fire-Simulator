@@ -5,7 +5,7 @@ import { BarChart, Bar, Cell, XAxis, YAxis, LabelList } from 'recharts';
 import { memo } from 'react';
 import statisticBlock from '.';
 
-function StatisticBlock({ stats }) {
+export default function StatisticBlock({ stats }) {
     const data = [
         // попытка обмануть внутреннюю логику ReCharts для отрисовки нулевых значений
         { name: STATE_NAMES[STATES.YOUNG], value: stats.young || 0.00001, displayValue: stats.young || 0, color: COLORS[STATES.YOUNG] },
@@ -46,5 +46,3 @@ function StatisticBlock({ stats }) {
         </Panel>
     );
 }
-
-export default memo(StatisticBlock)

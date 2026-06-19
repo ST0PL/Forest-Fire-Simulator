@@ -5,7 +5,7 @@ import { WindController } from './wind-controller';
 export class ClimateController {
   constructor() {
     this.currentSeasonIndex = 0;
-    this.globalMoisture = 70;
+    this.globalMoisture =  SETTINGS.CLIMATE.HUMIDITY[this.currentSeasonIndex];
     this.extremeDroughtDurationLimit = 0;
     this.extremeDroughtDuration = 0;
     this.windController = new WindController();
