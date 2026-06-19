@@ -360,7 +360,7 @@ export class ForestController {
   static createFromObject(object) {
     const forestController = new ForestController(object.width, object.height);
     forestController.tickCount = object.tickCount;
-    forestController.climate = Object.assign(new ClimateController(), object.climate);
+    forestController.climate = ClimateController.createFromObject(object.climate);
     // восстановление классов клеток матрицы через вложенный map и таблицу функций
     forestController.cells = object.cells.map(cells => cells.map(cell => Object.assign(CREATE_FUNCTIONS[cell.nativeType](cell.x, cell.y), cell)))
     return forestController;

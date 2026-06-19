@@ -51,4 +51,10 @@ export class ClimateController {
   isExtremeDroughtActive() {
     return this.extremeDroughtDuration > 0;
   }
+
+  static createFromObject(object) {
+    const climateController = Object.assign(new ClimateController(), object);
+    climateController.windController = Object.assign(new WindController(), object.windController);
+    return climateController;
+  }
 }

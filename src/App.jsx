@@ -103,8 +103,6 @@ export default function App() {
 
       </div>
 
-
-
       <div style={ { display: 'flex', flexDirection: 'column', gap: '10px', width: '370px', margin: '10px' } }>
         <StatisticBlock stats={stats} 
                         key={`${ticks}`} />

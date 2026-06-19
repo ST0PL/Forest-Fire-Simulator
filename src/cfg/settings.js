@@ -44,7 +44,6 @@ export const SETTINGS = {
     EXTREME_DROUGHT_THRESHOLD: 15, // если влажность воздуха < этого значения, то старое дерево может засохнуть
     YOUNG_DRYING_BASE_OFFSET: 5,
     DEADTREE_FACTOR_MULTIPLIER: 0.05, // влияние сухостоя на потерю влажности,
-    WINTER_BONUS: 5, 
     BASE_DRYING_FORMULA: {
       // формула скорости высыхания: скорость = A - (глобальнаяВлажность * B) (единиц/тик)
       A: 20, // максимальная скорость высыхания при низкой влажности (единиц/тик)
@@ -64,7 +63,6 @@ export const SETTINGS = {
   OLD_TREE: {
     STRESS_ACCUMULATION_RATE: 1.20, // базовая скорость накопления стресса за тик экстремальной жары
     STRESS_EVAPORATE_RATE: 0.15,// скорость снижения стресса, когда жара спала
-    // насколько быстрее накапливается стресс
     HEAT_STRESS_THRESHOLD: 30, // верхний порог стресса для превращения в сухостой
     STRESS_CHANCE: 0.85 // вероятность получения деревом единицы стресса в засуху
   },
@@ -79,7 +77,7 @@ export const SETTINGS = {
   // параметры восстановления леса
   REGENERATION: {
     REGENERATION_ENABLED: true,
-    MIN_RECOVERY_TIME: 120,    // мин. число тиков, прежде чем на пепле сможет что-то вырасти
+    MIN_RECOVERY_TIME: 120,    // мин. число тиков, прежде чем на пепел станет пустым участком (востановится)
     RECOVERY_TICK_CHANCE: { // вероятности получить тик восстановления
       [SEASONS.SPRING]: 0.5,
       [SEASONS.SUMMER]: 0.5,
