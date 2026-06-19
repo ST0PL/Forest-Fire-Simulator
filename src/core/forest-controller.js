@@ -190,11 +190,6 @@ export class ForestController {
             }
           }
 
-          // Зимний бонус: лёд в тканях деревьев
-          if (seasonIndex === SEASONS.WINTER) {
-            next.moisture = round(Math.min(100, next.moisture + SETTINGS.MOISTURE.WINTER_BONUS), 2); // прирост к влаге зимой
-          }
-
           // логика сухостоя
           if (current.state === STATES.OLD && this.climate.isExtremeDroughtActive()) {
               // при экстремальной жаре дерево блокирует потерю влаги (защитный механизм)
@@ -241,9 +236,11 @@ export class ForestController {
     // вероятность поспламенения (от случайного источника - "сухие грозы")
     const fireChance = drynessFactor * baseFireChance * deadTreeFactor * spreadMult;
     const wind = SETTINGS.WIND_ROSE.DIRECTIONS[this.climate.windController.direction];
-    
 
-    // если не штиль (!== undefined)
+    // флаг ориентированности клетки по направлению ветра
+    let isWindAligned = false;
+
+    // если не штиль (направление !== undefined)
     if(wind) {
       for (let neighbor of fireNeighbors) {
 
@@ -252,6 +249,10 @@ export class ForestController {
 
         // Если расположение соседнего дерева совпадает с направлением ветра относительно горящего
         if (dX === wind.dx && dY === wind.dy) { 
+          if(!isWindAligned) {
+            isWindAligned = true;
+          }
+
           const chance = fireChance * SETTINGS.WIND_ROSE.MULTIPLIER;
           
           if (Math.random() < chance) {
@@ -267,7 +268,9 @@ export class ForestController {
     const isExtremeDrought = this.climate.isExtremeDroughtActive();
 
     if (hasFireNeighbors || (isExtremeDrought && isCriticalDry)) {
-      if (Math.random() < fireChance) {
+      // если сейчас не штиль и клетка НЕ ориентирована по ветру  - урезаем базовую вероятность возгорания неориентированных по направлению ветра клеток
+      // иначе используется базовый шанс
+      if (Math.random() < (wind && !isWindAligned ? fireChance / SETTINGS.WIND_ROSE.MULTIPLIER : fireChance)) {
         cell.setFire();
       }
     }

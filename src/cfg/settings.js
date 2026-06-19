@@ -22,7 +22,7 @@ export const SETTINGS = {
       [SEASONS.SPRING]: 75, // весна
       [SEASONS.SUMMER]: 20, // лето, засуха, высокий риск пожара
       [SEASONS.AUTUMN]: 90, // осень, дожди, низкий риск пожара
-      [SEASONS.WINTER]: 40 // зима
+      [SEASONS.WINTER]: 15 // зима
     },
     // зимой есть вероятность, что снег потушит огонь за один тик
     WINTER_SNOW_EXTINGUISH_CHANCE: 0.35,
@@ -105,9 +105,9 @@ export const SETTINGS = {
     },
     // начальная влажность при генерации
     INITIAL_MOISTURE: {
-      YOUNG: 55,
+      YOUNG: 85,
       ADULT: 75,
-      OLD: 100,
+      OLD: 60,
     }
   },
 
