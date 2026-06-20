@@ -14,11 +14,11 @@ export class Tree {
     this.stress = 0;
   }
 
-  getDryingSpeed(globalMoisture) {
+  getBaseFireChance() {
     throw new Error("Необходима реализация в производном классе.");
   }
 
-  getBaseFireChance() {
+  getDryingSpeed(globalMoisture) {
     throw new Error("Необходима реализация в производном классе.");
   }
 
@@ -59,16 +59,8 @@ export class Tree {
     return (100 - this.moisture) / 100;
   }
 
-  getNativeType() {
-    return this.nativeType();
-  }
-
   getState() {
     return this.state;
-  }
-
-  setState(value) {
-    this.state = value;
   }
 
   getMoisture() {

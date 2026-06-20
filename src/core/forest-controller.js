@@ -364,7 +364,7 @@ export class ForestController {
     forestController.tickCount = object.tickCount;
     forestController.climate = ClimateController.createFromObject(object.climate);
     // восстановление классов клеток матрицы через вложенный map и таблицу функций
-    forestController.cells = object.cells.map(cells => cells.map(cell => Object.assign(CREATE_FUNCTIONS[cell.getNativeType()](cell.getX(), cell.getY()), cell)))
+    forestController.cells = object.cells.map(cells => cells.map(cell => Object.assign(CREATE_FUNCTIONS[cell.nativeType](cell.x, cell.y), cell)))
     return forestController;
   }
 }
