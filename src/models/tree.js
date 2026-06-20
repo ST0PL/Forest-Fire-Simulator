@@ -15,18 +15,23 @@ export class Tree {
   }
 
   getDryingSpeed(globalMoisture) {
-    const base = SETTINGS.MOISTURE.BASE_DRYING_FORMULA.A;
-    const coef = SETTINGS.MOISTURE.BASE_DRYING_FORMULA.B;
-    const mult = SETTINGS.TREE_TYPES.ADULT.DRYING_SPEED_MULTIPLIER;
-    return (base - (globalMoisture * coef)) * mult;
+    throw new Error("Необходима реализация в производном классе.");
   }
 
   getBaseFireChance() {
-    return SETTINGS.TREE_TYPES.ADULT.BASE_FIRE_CHANCE;
+    throw new Error("Необходима реализация в производном классе.");
   }
 
   getDryingProbability(globalMoisture) {
-    return SETTINGS.TREE_TYPES.ADULT.DRYING_PROBABILITY;
+    throw new Error("Необходима реализация в производном классе.");
+  }
+
+  getX() {
+    return this.x;
+  }
+
+  getY() {
+    return this.y;
   }
 
   setFire() {
@@ -37,6 +42,14 @@ export class Tree {
     this.state = STATES.FIRE;
   }
 
+  setAsh() {
+    this.age = 0;
+    this.stress = 0;
+    this.moisture = 0;
+    this.burnDuration = 0;
+    this.state = STATES.ASH;   
+  }
+
   extinguish() {
     this.burnDuration = 0;
     this.state = this.nativeType;  
@@ -44,5 +57,68 @@ export class Tree {
 
   getDrynessFactor(){
     return (100 - this.moisture) / 100;
+  }
+
+  getNativeType() {
+    return this.nativeType();
+  }
+
+  getState() {
+    return this.state;
+  }
+
+  setState(value) {
+    this.state = value;
+  }
+
+  getMoisture() {
+    return this.moisture;
+  }
+  
+  setMoisture(value) {
+    this.moisture = value;
+  }
+
+  getAge() {
+    return this.age;
+  }
+  
+  setAge(value) {
+    this.age = value;
+  }
+
+  getBurnDuration() {
+    return this.burnDuration;
+  }
+
+  getRecoveryTicks() {
+    return this.recoveryTicks;
+  }
+
+  getStress() {
+    return this.stress;
+  }
+
+  setStress(value) {
+    this.stress = value;
+  }
+
+  assign(object) {
+    this.moisture = object.moisture;
+    this.age = object.age;
+    this.burnDuration = object.burnDuration;
+    this.recoveryTicks = object.recoveryTicks;;
+  }
+
+  incAge() {
+    this.age++;
+  }
+
+  incBurnDuration() {
+    this.burnDuration++;
+  }
+
+  incRecoveryTicks() {
+    this.recoveryTicks++;
   }
 }

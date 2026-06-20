@@ -20,13 +20,13 @@ import EnvironmentIndicators from './Components/env-indicators';
 export default function App() {
   const forestRef = useRef(new ForestController(SETTINGS.FIELD.WIDTH, SETTINGS.FIELD.HEIGHT));
 
-  const [cells, setCells] = useState(forestRef.current.cells);
+  const [cells, setCells] = useState(forestRef.current.getCells());
   const [stats, setStats] = useState(forestRef.current.getStats());
   const [isRunning, setIsRunning] = useState(false);
   const [selectedCell, setSelectedCell] = useState(null);
-  const [season, setSeason] = useState(forestRef.current.climate.getSeasonName());
-  const [wind, setWind] = useState(forestRef.current.climate.getWindDirectionName());
-  const [airMoisture, setAirMoisture] = useState(forestRef.current.climate.globalMoisture);
+  const [season, setSeason] = useState(forestRef.current.getClimate().getSeasonName());
+  const [wind, setWind] = useState(forestRef.current.getClimate().getWindDirectionName());
+  const [airMoisture, setAirMoisture] = useState(forestRef.current.getClimate().getMoisture());
   const [ticks, setTicks] = useState(0);
   const [tickInterval, setTickInterval] = useState(SETTINGS.TIME.TICK_INTERVAL_MS);
 
@@ -39,24 +39,24 @@ export default function App() {
   }, [isRunning, selectedCell, tickInterval]);
 
   const handleStep = () => {
-      setSeason(forestRef.current.climate.getSeasonName());
-      setWind(forestRef.current.climate.getWindDirectionName());
-      setTicks(forestRef.current.tickCount);
+      setSeason(forestRef.current.getClimate().getSeasonName());
+      setWind(forestRef.current.getClimate().getWindDirectionName());
+      setTicks(forestRef.current.getTicks());
       const nextGrid = forestRef.current.tick();
       refreshGrid();
   }
     
   const refreshGrid = () => {
-    setCells([...forestRef.current.cells]); // обновляем сетку
+    setCells([...forestRef.current.getCells()]); // обновляем сетку
     setStats(forestRef.current.getStats()); // обновляем статистику
-    setAirMoisture(forestRef.current.climate.globalMoisture); // обновляем показатель влажности
-    setSelectedCell(selectedCell ? forestRef.current.cells[selectedCell.y][selectedCell.x]  :null);
+    setAirMoisture(forestRef.current.getClimate().getMoisture()); // обновляем показатель влажности
+    setSelectedCell(selectedCell ? forestRef.current.getCells()[selectedCell.y][selectedCell.x]  :null);
   }
 
   const handleReset = () => {
       forestRef.current = new ForestController(SETTINGS.FIELD.WIDTH, SETTINGS.FIELD.HEIGHT);
-      setSeason(forestRef.current.climate.getSeasonName());
-      setWind(forestRef.current.climate.getWindDirectionName());
+      setSeason(forestRef.current.getClimate().getSeasonName());
+      setWind(forestRef.current.getClimate().getWindDirectionName());
       setTicks(0);
       setIsRunning(false);
       refreshGrid();
@@ -99,7 +99,7 @@ export default function App() {
                       refreshHandler={refreshGrid} />
         <Help />
 
-        <DataTable cells={forestRef.current.cells} />
+        <DataTable cells={forestRef.current.getCells()} />
 
       </div>
 

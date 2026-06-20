@@ -45,11 +45,19 @@ export class ClimateController {
   }
 
   getWindDirectionName() {
-    return WIND_DIRECTION_NAMES[this.windController.direction];
+    return WIND_DIRECTION_NAMES[this.windController.getDirection()];
   }
 
   isExtremeDroughtActive() {
     return this.extremeDroughtDuration > 0;
+  }
+
+  getMoisture() {
+    return this.globalMoisture;
+  }
+
+  getWindController() {
+    return this.windController;
   }
 
   static createFromObject(object) {

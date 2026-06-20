@@ -20,8 +20,8 @@ export default function ControlPanel({ forestRef, resetHandler, stepHandler, set
         }
 
         forestRef.current = loaded;
-        setSeasonHandler(forestRef.current.climate.getSeasonName());
-        setTicksHandler(forestRef.current.tickCount);
+        setSeasonHandler(forestRef.current.getClimate().getSeasonName());
+        setTicksHandler(forestRef.current.getTicks());
         setIsRunningHandler(false);
         refreshHandler();
     }

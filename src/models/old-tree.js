@@ -22,10 +22,10 @@ export class OldTree extends Tree {
   }
 
   getDryingProbability(globalMoisture) {
-  // вековые деревья блокируют устьица, пассивная потеря влаги = 0
-  if (globalMoisture <= SETTINGS.MOISTURE.EXTREME_DROUGHT_THRESHOLD) {
-    return 0;
+    // вековые деревья блокируют устьица, пассивная потеря влаги = 0
+    if (globalMoisture <= SETTINGS.MOISTURE.EXTREME_DROUGHT_THRESHOLD) {
+      return 0;
+    }
+    return SETTINGS.TREE_TYPES.OLD.DRYING_PROBABILITY;
   }
-  return SETTINGS.TREE_TYPES.OLD.DRYING_PROBABILITY;
-}
 }

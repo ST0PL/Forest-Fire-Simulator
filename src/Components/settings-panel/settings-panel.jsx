@@ -34,6 +34,7 @@ const DEFAULTS = {
     adultToOldAge: SETTINGS.GROWTH.ADULT_TO_OLD_AGE,
     growthEnabled: SETTINGS.GROWTH.GROWTH_ENABLED,
     regenerationEnabled: SETTINGS.REGENERATION.REGENERATION_ENABLED,
+    minRecoveryTime: SETTINGS.REGENERATION.MIN_RECOVERY_TIME,
 };
 
 export default function SettingsPanel({ forestRef, resetHandler, setIsRunningHandler, setTickIntervalHandler }) {
@@ -92,6 +93,7 @@ export default function SettingsPanel({ forestRef, resetHandler, setIsRunningHan
 
         if (newSettings.regenChance !== undefined) SETTINGS.REGENERATION.BASE_CHANCE_PER_TICK = newSettings.regenChance;
         if (newSettings.regenerationEnabled !== undefined) SETTINGS.REGENERATION.REGENERATION_ENABLED = newSettings.regenerationEnabled;
+        if (newSettings.minRecoveryTime !== undefined) SETTINGS.REGENERATION.MIN_RECOVERY_TIME = newSettings.minRecoveryTime;
 
         // наложение новых параметров на существующие
         const updated = { ...values, ...newSettings };
@@ -172,19 +174,19 @@ export default function SettingsPanel({ forestRef, resetHandler, setIsRunningHan
                 <div className={styles.group}>
                     <div className={styles.header}>Влажность</div>
                     <Slider label={`Весна: ${values.springHumidity}%`}
-                            min="10" max="100" step="1"
+                            min="15" max="100" step="1"
                             value={values.springHumidity}
                             onChange={(e) => applySettings({ springHumidity: Number(e.target.value) })} />
                     <Slider label={`Лето: ${values.summerHumidity}%`}
-                            min="10" max="100" step="1"
+                            min="15" max="100" step="1"
                             value={values.summerHumidity}
                             onChange={(e) => applySettings({ summerHumidity: Number(e.target.value) })} />
                     <Slider label={`Осень: ${values.autumnHumidity}%`}
-                            min="10" max="100" step="1"
+                            min="15" max="100" step="1"
                             value={values.autumnHumidity}
                             onChange={(e) => applySettings({ autumnHumidity: Number(e.target.value) })} />
                     <Slider label={`Зима: ${values.winterHumidity}%`}
-                            min="10" max="100" step="1"
+                            min="15" max="100" step="1"
                             value={values.winterHumidity}
                             onChange={(e) => applySettings({ winterHumidity: Number(e.target.value) })} />
                 </div>
@@ -265,9 +267,14 @@ export default function SettingsPanel({ forestRef, resetHandler, setIsRunningHan
                                 value={values.adultToOldAge}
                                 onChange={(e) => applySettings({ adultToOldAge: Number(e.target.value) })}
                                 disabled={!values.growthEnabled} />
-                        <Checkbox label={'Появление новых деревьев'}
+                        <Checkbox label={'Регенерация'}
                                   checked={values.regenerationEnabled}
                                   onChange={(e) => applySettings({ regenerationEnabled: e.target.checked })} />
+                        <Slider label={`Период восстановления: ${values.minRecoveryTime} тиков`}
+                                min="1" max="200" step="1"
+                                value={values.minRecoveryTime}
+                                onChange={(e) => applySettings({ minRecoveryTime: Number(e.target.value) })}
+                                disabled={!values.regenerationEnabled} />
                 </div>
             </div>
             <div className={styles.divider} />

@@ -12,13 +12,13 @@ export default function Grid({ selectedCell, setCellHandler, cells }) {
         <div>
             <div className={styles.grid} style={ { '--field-width': SETTINGS.FIELD.WIDTH, '--cell-size': SETTINGS.FIELD.CELL_SIZE } }>
                 {flatCells.map(cell => {
-                    const isSelected = selectedCell && selectedCell.x === cell.x && selectedCell.y === cell.y;
+                    const isSelected = selectedCell && selectedCell.getX() === cell.getX() && selectedCell.getY() === cell.getY();
                     return (
-                    <Cell key={`${cell.x}-${cell.y}`}
+                    <Cell key={`${cell.getX()}-${cell.getY()}`}
                           cell={cell}
                           onClick={setCellHandler}
                           size={SETTINGS.FIELD.CELL_SIZE }
-                          background={COLORS[cell.state]}
+                          background={COLORS[cell.getState()]}
                           outline={isSelected ? '2px solid #00ffff' : 'none'}
                           outlineOffset={isSelected ? -1 : 0}
                           zIndex={isSelected ? 10 : 1} />

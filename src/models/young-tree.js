@@ -7,6 +7,7 @@ export class YoungTree extends Tree {
     super(x, y, STATES.YOUNG);
     this.moisture = SETTINGS.INIT.INITIAL_MOISTURE.YOUNG;
   }
+  
   getDryingSpeed(globalMoisture) {
     const base = SETTINGS.MOISTURE.BASE_DRYING_FORMULA.A + 
                  SETTINGS.MOISTURE.YOUNG_DRYING_BASE_OFFSET;

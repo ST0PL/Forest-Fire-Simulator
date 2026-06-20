@@ -30,4 +30,8 @@ export class WindController {
         this.durationLimit = getRandomInt(0, SETTINGS.WIND_ROSE.DURATION_THRESHOLD);
         this.duration = 0;
     }
+
+    getDirection() {
+        return this.direction;
+    }
 }

@@ -5,24 +5,26 @@ import { UI_COLORS, COLORS, STATES, STATE_NAMES } from '../../cfg/constants';
 
 export default function PropertiesBlock( { forestRef, selectedCell, refreshHandler } ) {
 
+    const cords = { x: selectedCell?.getX(), y: selectedCell?.getY() }
+    const state = selectedCell?.getState();
 
     const handleSetFire = () => {
-        forestRef.current.setFire(selectedCell.x, selectedCell.y);
+        forestRef.current.setFire(cords.x, cords.y);
         refreshHandler();
     }
 
     const handleExtinguish = () => {
-        forestRef.current.extinguishTree(selectedCell.x, selectedCell.y);
+        forestRef.current.extinguishTree(cords.x, cords.y);
         refreshHandler();
     }
 
     const handleCreateCell = (state) => {
-        forestRef.current.createCell(selectedCell.x, selectedCell.y, state);
+        forestRef.current.createCell(cords.x, cords.y, state);
         refreshHandler();
     }
 
     const handleSetDead = () => {
-        forestRef.current.setDead(selectedCell.x, selectedCell.y, selectedCell.age);
+        forestRef.current.setDead(cords.x, cords.y, selectedCell.getAge());
         refreshHandler();
     }
 
@@ -30,17 +32,17 @@ export default function PropertiesBlock( { forestRef, selectedCell, refreshHandl
         <Panel title='Свойства' color='#ffb74d'>
           {selectedCell ? (
             <div className={styles.propertiesContainer}>
-                <p>Координаты: [{selectedCell.x}, {selectedCell.y}]</p>
-                <p>Состояние: <b style={{ color: selectedCell.state != STATES.EMPTY ? COLORS[selectedCell.state] : 'white' }}>{STATE_NAMES[selectedCell.state]}</b></p>
-                {[STATES.EMPTY, STATES.DEAD, STATES.ASH].includes(selectedCell.state) ? null : <p>Влага: <b style={{ color: '#4caf50' }}>{selectedCell.moisture}%</b></p>}
-                {selectedCell.state !== STATES.ASH ? null : <p>Восстановление: <b>{selectedCell.recoveryTicks} тиков</b></p>}
-                {[STATES.OLD].includes(selectedCell.state) ? <p>Гидравлический стресс: {selectedCell.stress}</p> : null}
-                {[STATES.EMPTY, STATES.DEAD, STATES.FIRE, STATES.ASH].includes(selectedCell.state) ? null : <p>Возраст: {selectedCell.age} шагов</p> }
-                {[STATES.EMPTY, STATES.FIRE, STATES.ASH].includes(selectedCell.state) ? null : <Button onClick={handleSetFire} background={UI_COLORS.BTN_FIRE}>Поджечь</Button>}
-                {selectedCell.state === STATES.FIRE ? <Button onClick={handleExtinguish} background={UI_COLORS.BTN_EXTINGUISH}>Потушить</Button> : null}
-                {[STATES.EMPTY, STATES.DEAD, STATES.FIRE, STATES.ASH].includes(selectedCell.state) ? null : <Button onClick={handleSetDead} background={UI_COLORS.BTN_DEAD}>Превратить в сухостой</Button>}
+                <p>Координаты: [{cords.x}, {cords.y}]</p>
+                <p>Состояние: <b style={{ color: state != STATES.EMPTY ? COLORS[state] : 'white' }}>{STATE_NAMES[state]}</b></p>
+                {[STATES.EMPTY, STATES.DEAD, STATES.ASH].includes(state) ? null : <p>Влага: <b style={{ color: '#4caf50' }}>{selectedCell.getMoisture()}%</b></p>}
+                {state !== STATES.ASH ? null : <p>Восстановление: <b>{selectedCell.getRecoveryTicks()} тиков</b></p>}
+                {[STATES.OLD].includes(state) ? <p>Гидравлический стресс: {selectedCell.getStress()}</p> : null}
+                {[STATES.EMPTY, STATES.DEAD, STATES.FIRE, STATES.ASH].includes(state) ? null : <p>Возраст: {selectedCell.getAge()} шагов</p> }
+                {[STATES.EMPTY, STATES.FIRE, STATES.ASH].includes(state) ? null : <Button onClick={handleSetFire} background={UI_COLORS.BTN_FIRE}>Поджечь</Button>}
+                {state === STATES.FIRE ? <Button onClick={handleExtinguish} background={UI_COLORS.BTN_EXTINGUISH}>Потушить</Button> : null}
+                {[STATES.EMPTY, STATES.DEAD, STATES.FIRE, STATES.ASH].includes(state) ? null : <Button onClick={handleSetDead} background={UI_COLORS.BTN_DEAD}>Превратить в сухостой</Button>}
                 {
-                ![STATES.EMPTY, STATES.ASH].includes(selectedCell.state) ? null : 
+                ![STATES.EMPTY, STATES.ASH].includes(state) ? null : 
                 <>
                     <div className={styles.creatorContainer}>
                     <p>Высадить дерево</p>
@@ -52,7 +54,7 @@ export default function PropertiesBlock( { forestRef, selectedCell, refreshHandl
                     </div>
                 </>
                 }    
-                {![STATES.EMPTY, STATES.FIRE].includes(selectedCell.state) ? <Button onClick={() => handleCreateCell(STATES.EMPTY)} background={UI_COLORS.BTN_DELETE}>Удалить</Button> : null}          
+                {![STATES.EMPTY, STATES.FIRE].includes(state) ? <Button onClick={() => handleCreateCell(STATES.EMPTY)} background={UI_COLORS.BTN_DELETE}>Удалить</Button> : null}          
             </div>
           ) : <p className={styles.empty}>Выберите ячейку, нажав ПКМ</p>}
         </Panel>

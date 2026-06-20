@@ -8,12 +8,12 @@ import statisticBlock from '.';
 export default function StatisticBlock({ stats }) {
     const data = [
         // попытка обмануть внутреннюю логику ReCharts для отрисовки нулевых значений
-        { name: STATE_NAMES[STATES.YOUNG], value: stats.young || 0.00001, displayValue: stats.young || 0, color: COLORS[STATES.YOUNG] },
-        { name: STATE_NAMES[STATES.ADULT], value: stats.adult || 0.00001, displayValue: stats.adult || 0, color: COLORS[STATES.ADULT] },
-        { name: STATE_NAMES[STATES.OLD], value: stats.old || 0.00001, displayValue: stats.old || 0, color: COLORS[STATES.OLD] },
-        { name: STATE_NAMES[STATES.FIRE], value: stats.fire || 0.00001, displayValue: stats.fire || 0, color: COLORS[STATES.FIRE] },
-        { name: STATE_NAMES[STATES.ASH], value: stats.ash || 0.00001, displayValue: stats.ash || 0, color: COLORS[STATES.ASH] },
-        { name: STATE_NAMES[STATES.DEAD], value: stats.dead || 0.00001, displayValue: stats.dead || 0, color: COLORS[STATES.DEAD] }
+        { name: STATE_NAMES[STATES.YOUNG], value: stats.getYoung() || 0.00001, displayValue: stats.getYoung() || 0, color: COLORS[STATES.YOUNG] },
+        { name: STATE_NAMES[STATES.ADULT], value: stats.getAdult() || 0.00001, displayValue: stats.getAdult() || 0, color: COLORS[STATES.ADULT] },
+        { name: STATE_NAMES[STATES.OLD], value: stats.getOld() || 0.00001, displayValue: stats.getOld() || 0, color: COLORS[STATES.OLD] },
+        { name: STATE_NAMES[STATES.FIRE], value: stats.getFire() || 0.00001, displayValue: stats.getFire() || 0, color: COLORS[STATES.FIRE] },
+        { name: STATE_NAMES[STATES.ASH], value: stats.getAsh() || 0.00001, displayValue: stats.getAsh() || 0, color: COLORS[STATES.ASH] },
+        { name: STATE_NAMES[STATES.DEAD], value: stats.getDead() || 0.00001, displayValue: stats.getDead() || 0, color: COLORS[STATES.DEAD] }
     ];
 
     return (
@@ -42,7 +42,7 @@ export default function StatisticBlock({ stats }) {
                 </Bar>
             </BarChart>
             <div className={styles.divider} />
-            <p className={styles.avgMoisture}>Средняя влажность: <b style={{ color: '#4caf50' }}>{stats.avgMoisture}%</b></p>   
+            <p className={styles.avgMoisture}>Средняя влажность: <b style={{ color: '#4caf50' }}>{stats.getAvarageMoisture()}%</b></p>   
         </Panel>
     );
 }
