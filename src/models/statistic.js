@@ -12,7 +12,7 @@ export class Statistic {
     getYoung() {
         return this.young;
     }
-    
+
     getAdult() {
         return this.adult;
     }
@@ -33,7 +33,7 @@ export class Statistic {
         return this.ash;
     }
 
-    getAvarageMoisture() {
+    getAverageMoisture() {
         return this.avgMoisture;
     }    
 }

@@ -42,7 +42,7 @@ export default function StatisticBlock({ stats }) {
                 </Bar>
             </BarChart>
             <div className={styles.divider} />
-            <p className={styles.avgMoisture}>Средняя влажность: <b style={{ color: '#4caf50' }}>{stats.getAvarageMoisture()}%</b></p>   
+            <p className={styles.avgMoisture}>Средняя влажность: <b style={{ color: '#4caf50' }}>{stats.getAverageMoisture()}%</b></p>   
         </Panel>
     );
 }

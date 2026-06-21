@@ -5,8 +5,8 @@ import { STATES } from '../cfg/constants';
 export class OldTree extends Tree {
   constructor(x, y) {
     super(x, y, STATES.OLD);
-    this.moisture = SETTINGS.INIT.INITIAL_MOISTURE.OLD
-    this.age = SETTINGS.GROWTH.ADULT_TO_OLD_AGE
+    this.moisture = SETTINGS.INIT.INITIAL_MOISTURE.OLD;
+    this.age = SETTINGS.GROWTH.ADULT_TO_OLD_AGE;
   }
 
   getDryingSpeed(globalMoisture) {
@@ -27,5 +27,13 @@ export class OldTree extends Tree {
       return 0;
     }
     return SETTINGS.TREE_TYPES.OLD.DRYING_PROBABILITY;
+  }
+
+  getStress() {
+    return this.stress;
+  }
+
+  setStress(value) {
+    this.stress = value;
   }
 }

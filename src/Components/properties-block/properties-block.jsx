@@ -34,7 +34,7 @@ export default function PropertiesBlock( { forestRef, selectedCell, refreshHandl
             <div className={styles.propertiesContainer}>
                 <p>Координаты: [{cords.x}, {cords.y}]</p>
                 <p>Состояние: <b style={{ color: state != STATES.EMPTY ? COLORS[state] : 'white' }}>{STATE_NAMES[state]}</b></p>
-                {[STATES.EMPTY, STATES.DEAD, STATES.ASH].includes(state) ? null : <p>Влага: <b style={{ color: '#4caf50' }}>{selectedCell.getMoisture()}%</b></p>}
+                {[STATES.EMPTY, STATES.DEAD, STATES.ASH, STATES.FIRE].includes(state) ? null : <p>Влага: <b style={{ color: '#4caf50' }}>{selectedCell.getMoisture()}%</b></p>}
                 {state !== STATES.ASH ? null : <p>Восстановление: <b>{selectedCell.getRecoveryTicks()} тиков</b></p>}
                 {[STATES.OLD].includes(state) ? <p>Гидравлический стресс: {selectedCell.getStress()}</p> : null}
                 {[STATES.EMPTY, STATES.DEAD, STATES.FIRE, STATES.ASH].includes(state) ? null : <p>Возраст: {selectedCell.getAge()} шагов</p> }

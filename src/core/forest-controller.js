@@ -96,7 +96,7 @@ export class ForestController {
         // зимой снег может заранее потушить огонь
         if (seasonIndex === SEASONS.WINTER && current.getState() === STATES.FIRE && 
           Math.random() < SETTINGS.CLIMATE.WINTER_SNOW_EXTINGUISH_CHANCE) {
-            next.setAsh();
+            next.extinguish();
             continue;
         }
 

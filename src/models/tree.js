@@ -87,14 +87,6 @@ export class Tree {
     return this.recoveryTicks;
   }
 
-  getStress() {
-    return this.stress;
-  }
-
-  setStress(value) {
-    this.stress = value;
-  }
-
   assign(object) {
     this.moisture = object.moisture;
     this.age = object.age;
