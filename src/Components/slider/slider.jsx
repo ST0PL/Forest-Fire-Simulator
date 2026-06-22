@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import styles from './slider.module.css';
 
 export default function Slider( { label, min, max, step, value, onChange, disabled } ) {

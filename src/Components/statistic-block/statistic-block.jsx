@@ -2,8 +2,6 @@ import Panel from '../panel';
 import styles from './statistic-block.module.css';
 import { COLORS, STATES, STATE_NAMES } from '../../cfg/constants';
 import { BarChart, Bar, Cell, XAxis, YAxis, LabelList } from 'recharts';
-import { memo } from 'react';
-import statisticBlock from '.';
 
 export default function StatisticBlock({ stats }) {
     const data = [

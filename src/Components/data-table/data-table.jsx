@@ -1,20 +1,21 @@
 import React, { useState, useMemo, memo } from 'react';
-import { COLORS, STATE_NAMES, STATES } from '../../cfg/constants';
+import { STATE_NAMES } from '../../cfg/constants';
 import styles from './data-table.module.css';
 import ToggleButton from '../toggle-button/toggle-button';
 
 
 // выделение отдельного компонента TableRow для кэширования строк таблицы
+// Передача отдельных примитивов для исключения сравнения объекта ячейки по ссылке 
 
-function TableRow({ cell }) {
+function TableRow({ x, y, state, age, moisture, recoveryTicks, stress }) {
     return (
         <div className={styles.row} role="row">
-            <div>{`${cell.x}:${cell.y}`}</div>
-            <div>{STATE_NAMES[cell.state]}</div>
-            <div>{cell.age}</div>
-            <div>{cell.moisture}</div>
-            <div>{cell.recoveryTicks}</div>
-            <div>{cell.stress}</div>
+            <div>{`${x}:${y}`}</div>
+            <div>{STATE_NAMES[state]}</div>
+            <div>{age}</div>
+            <div>{moisture}</div>
+            <div>{recoveryTicks}</div>
+            <div>{stress}</div>
         </div>
     );
 }
@@ -99,7 +100,13 @@ function Table({ cells }) {
                 <div role="rowgroup">
                     {sortedCells.map(cell => (
                         <CachedTableRow key={`${cell.x}-${cell.y}`} 
-                                        cell={cell}/>
+                                        x={cell.x}
+                                        y={cell.y}
+                                        state={cell.getState()}
+                                        age={cell.getAge()}
+                                        moisture={cell.getMoisture()}
+                                        recoveryTicks={cell.getRecoveryTicks()}
+                                        stress={cell.getStress?.() ?? 0}/> // опциональная последовательность т.к. не у всех наследников Tree есть getStress
                     ))}
                 </div>
             </div>

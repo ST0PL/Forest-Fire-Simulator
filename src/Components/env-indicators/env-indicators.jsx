@@ -1,4 +1,3 @@
-import Panel from '../panel';
 import styles from './env-indicators.module.css';
 
 export default function EnvironmentIndicators( { season, wind, airMoisture, ticks } ) {

@@ -1,5 +1,4 @@
-import { STATES } from "../cfg/constants";
-import { SETTINGS } from "../cfg/settings";
+import { STATES } from "../cfg/constants";;
 
 export class Tree {
   constructor(x, y, typeId) {

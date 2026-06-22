@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
-import { COLORS, UI_COLORS } from '../../cfg/constants';
-import Button from '../button';
+import { COLORS } from '../../cfg/constants';
 import Cell from '../cell';
 import styles from './grid.module.css';
 import { SETTINGS } from '../../cfg/settings';

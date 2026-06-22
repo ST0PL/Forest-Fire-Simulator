@@ -1,15 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ForestController } from './core/forest-controller';
-import { COLORS, UI_COLORS, STATE_NAMES, STATES } from './cfg/constants';
 import { SETTINGS } from './cfg/settings';
-import { save, load } from './utils/saveUtils';
-import Button from './Components/button';
 import Grid from './Components/grid';
 import Header from './Components/header';
 import Footer from './Components/footer';
 import SettingsPanel from './Components/settings-panel';
 import ControlPanel from './Components/control-panel';
-import Panel from './Components/panel';
 import Help from './Components/help';
 import DataTable from './Components/data-table';
 import PropertiesBlock from './Components/properties-block';
@@ -47,7 +43,7 @@ export default function App() {
   }
     
   const refreshGrid = () => {
-    setCells([...forestRef.current.getCells()]); // обновляем сетку
+    setCells([...forestRef.current.getCells().map(row => [...row])]); // обновляем сетку с обновлением ссылок
     setStats(forestRef.current.getStats()); // обновляем статистику
     setAirMoisture(forestRef.current.getClimate().getMoisture()); // обновляем показатель влажности
     setSelectedCell(selectedCell ? forestRef.current.getCells()[selectedCell.y][selectedCell.x]  :null);
@@ -99,7 +95,7 @@ export default function App() {
                       refreshHandler={refreshGrid} />
         <Help />
 
-        <DataTable cells={forestRef.current.getCells()} />
+        <DataTable cells={cells} />
 
       </div>
 

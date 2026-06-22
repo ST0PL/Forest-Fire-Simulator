@@ -1,7 +1,6 @@
 import styles from './control-panel.module.css';
 import Button from '../button';
 import { UI_COLORS } from '../../cfg/constants';
-import { SETTINGS } from '../../cfg/settings';
 import { ForestController } from '../../core/forest-controller';
 import { save, load } from '../../utils/saveUtils';
 
