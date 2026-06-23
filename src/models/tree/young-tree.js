@@ -1,11 +1,25 @@
+import { SETTINGS } from '../../cfg/settings';
+import { STATES } from '../../cfg/constants';
 import { Tree } from './tree';
-import { SETTINGS } from '../cfg/settings';
-import { STATES } from '../cfg/constants';
+import { AdultTree } from './adult-tree';
 
 export class YoungTree extends Tree {
   constructor(x, y) {
     super(x, y, STATES.YOUNG);
     this.moisture = SETTINGS.INIT.INITIAL_MOISTURE.YOUNG;
+  }
+
+  tick(env) {
+    this.age++;
+    if(SETTINGS.GROWTH.GROWTH_ENABLED) {
+      if (this.age > SETTINGS.GROWTH.YOUNG_TO_ADULT_AGE) {
+        const newTree = new AdultTree(this.x, this.y);
+        newTree.assign(this);
+        env.replaceCell(newTree);
+        return;
+      }
+    }
+    super.tick(env);
   }
   
   getDryingSpeed(globalMoisture) {

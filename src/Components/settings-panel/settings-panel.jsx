@@ -122,10 +122,6 @@ export default function SettingsPanel({ forestRef, resetHandler, setIsRunningHan
         }
     }, []);
 
-    const handleSpeedChange = (val) => {
-        applySettings({ tickInterval: val });
-    };
-
     const handleReset = () => {
         localStorage.removeItem('forestSim_settings');
 

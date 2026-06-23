@@ -4,7 +4,7 @@ import { UI_COLORS } from '../../cfg/constants';
 import { ForestController } from '../../core/forest-controller';
 import { save, load } from '../../utils/saveUtils';
 
-export default function ControlPanel({ forestRef, resetHandler, stepHandler, setSeasonHandler, setWindHandler, setTicksHandler, setIsRunningHandler, isRunning, refreshHandler }) {
+export default function ControlPanel({ forestRef, resetHandler, stepHandler, setSeasonHandler, setTicksHandler, setIsRunningHandler, isRunning, refreshHandler }) {
 
     const handleClear = () => {
         forestRef.current.setEmpty();

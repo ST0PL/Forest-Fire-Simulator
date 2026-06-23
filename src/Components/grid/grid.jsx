@@ -5,7 +5,7 @@ import styles from './grid.module.css';
 import { SETTINGS } from '../../cfg/settings';
 
 export default function Grid({ selectedCell, setCellHandler, cells }) {
-    const flatCells = useMemo(() => cells.flatMap(row => row), [cells]);
+    const flatCells = useMemo(() => cells.flat(), [cells]);
 
     return (
         <div>

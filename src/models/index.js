@@ -1,6 +1,7 @@
-export { Tree } from './tree';
-export { YoungTree } from './young-tree';
-export { AdultTree } from './adult-tree';
-export { OldTree } from './old-tree';
-export { DeadTree } from './dead-tree';
-export { Statistic } from './statistic';
+export { Tree } from './tree/tree';
+export { YoungTree } from './tree/young-tree';
+export { AdultTree } from './tree/adult-tree';
+export { OldTree } from './tree/old-tree';
+export { DeadTree } from './tree/dead-tree';
+export { Statistic } from './tree/statistic';
+export { Empty } from './environment/empty';

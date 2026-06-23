@@ -1,4 +1,5 @@
-import { AdultTree, DeadTree, OldTree, Tree, YoungTree } from "../models";
+import { AdultTree, DeadTree, Empty, OldTree, Tree, YoungTree } from "../models";
+import { Ash } from "../models/environment/ash";
 
 export const SEASONS = {
   SPRING: 0,
@@ -69,13 +70,12 @@ export const STATE_NAMES = {
 
 // набор функций для создания объектов деревьев после десериализации клеток
 export const CREATE_FUNCTIONS = {
-  [STATES.EMPTY]: (x, y) => new Tree(x, y, STATES.EMPTY),
+  [STATES.EMPTY]: (x, y) => new Empty(x, y),
   [STATES.YOUNG]: (x, y) => new YoungTree(x, y),
   [STATES.ADULT]: (x, y) => new AdultTree(x, y),
   [STATES.OLD]: (x, y) => new OldTree(x, y),
   [STATES.DEAD]: (x, y) => new DeadTree(x, y),
-  [STATES.FIRE]: (x, y) => new YoungTree(x, y),
-  [STATES.ASH]: (x, y) => new YoungTree(x, y),
+  [STATES.ASH]: (x, y) => new Ash(x, y),
 }
 
 export const UI_COLORS = {

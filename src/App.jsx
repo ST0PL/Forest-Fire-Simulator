@@ -88,7 +88,6 @@ export default function App() {
                       resetHandler={handleReset}
                       stepHandler={handleStep}
                       setSeasonHandler={setSeason}
-                      setWindHandler={setWind}
                       setTicksHandler={setTicks}
                       setIsRunningHandler={setIsRunning}
                       isRunning={isRunning}

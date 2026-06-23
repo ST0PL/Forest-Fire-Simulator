@@ -128,7 +128,6 @@ export const SETTINGS = {
     DEAD: {
       BASE_FIRE_CHANCE: 1.0,
       DRYING_SPEED_MULTIPLIER: 0,
-      DRYING_PROBABILITY: 0,
     }
   },
 

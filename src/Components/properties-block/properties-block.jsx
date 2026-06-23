@@ -19,7 +19,7 @@ export default function PropertiesBlock( { forestRef, selectedCell, refreshHandl
     }
 
     const handleCreateCell = (state) => {
-        forestRef.current.createCell(cords.x, cords.y, state);
+        forestRef.current.createCellGlobal(cords.x, cords.y, state);
         refreshHandler();
     }
 

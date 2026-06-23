@@ -1,4 +1,4 @@
-import React, { useState, useMemo, memo } from 'react';
+import { useState, useMemo, memo } from 'react';
 import { STATE_NAMES } from '../../cfg/constants';
 import styles from './data-table.module.css';
 import ToggleButton from '../toggle-button/toggle-button';
@@ -40,7 +40,7 @@ function Table({ cells }) {
     };
 
     const flatCells = useMemo(() => {
-        return cells.flatMap(cell => cell);
+        return cells.flat();
     }, [cells]);
 
 
@@ -56,8 +56,8 @@ function Table({ cells }) {
                 valueB = b.x * 10000 + b.y;
             }
             else {
-                valueA = a[sortConfig.key];
-                valueB = b[sortConfig.key];
+                valueA = a[sortConfig.key] ?? 0;
+                valueB = b[sortConfig.key] ?? 0;
             }
 
             if (valueA < valueB) return sortConfig.direction === 'asc' ? -1 : 1;
@@ -99,13 +99,13 @@ function Table({ cells }) {
 
                 <div role="rowgroup">
                     {sortedCells.map(cell => (
-                        <CachedTableRow key={`${cell.x}-${cell.y}`} 
-                                        x={cell.x}
-                                        y={cell.y}
+                        <CachedTableRow key={`${cell.getX()}-${cell.getY()}`} 
+                                        x={cell.getX()}
+                                        y={cell.getY()}
                                         state={cell.getState()}
-                                        age={cell.getAge()}
-                                        moisture={cell.getMoisture()}
-                                        recoveryTicks={cell.getRecoveryTicks()}
+                                        age={cell.getAge?.() ?? 0}
+                                        moisture={cell.getMoisture?.() ?? 0}
+                                        recoveryTicks={cell.getRecoveryTicks?.() ?? 0}
                                         stress={cell.getStress?.() ?? 0}/> // опциональная последовательность т.к. не у всех наследников Tree есть getStress
                     ))}
                 </div>
