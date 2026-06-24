@@ -13,20 +13,33 @@ export default function SettingsPanel({ forestRef, resetHandler, setIsRunningHan
     const [values, setValues] = useState({ ...DEFAULTS });
 
     // применение параметров (изменение данных в SETTINGS, обновление ui панели и сохранение в локальное хранилище)
-    const applySettings = (newSettings, preventReset) => {
+    const applySettings = (newSettings) => {
+        
+        if (newSettings.fieldWidth !== undefined || newSettings.fieldHeight !== undefined ||
+            newSettings.waterChannelCount !== undefined || newSettings.waterChannelMeanders !== undefined || newSettings.waterChannelSegment) {
 
-        if (newSettings.fieldWidth !== undefined || newSettings.fieldHeight !== undefined) {
-            if(!(newSettings.fieldWidth === SETTINGS.FIELD.WIDTH && newSettings.fieldHeight === SETTINGS.FIELD.HEIGHT)) {
+                const width = SETTINGS.FIELD.WIDTH;
+                const height = SETTINGS.FIELD.HEIGHT;
+                const countThreshold = SETTINGS.WATER_CHANNELS.COUNT_THRESHOLD;
+                const meandersThreshold = SETTINGS.WATER_CHANNELS.MEANDERS_THRESHOLD;
+                const segmentThreshold = SETTINGS.WATER_CHANNELS.SEGMENT_THRESHOLD;
+
+                if (newSettings.fieldWidth === width && newSettings.fieldHeight === height &&
+                   newSettings.waterChannelCount === countThreshold && newSettings.waterChannelMeanders === meandersThreshold && newSettings.waterChannelSegment === segmentThreshold) {
+                        return;
+                }
+
                 setIsRunningHandler(false);
 
-                if (newSettings.fieldWidth) SETTINGS.FIELD.WIDTH = newSettings.fieldWidth;
-                if (newSettings.fieldHeight) SETTINGS.FIELD.HEIGHT = newSettings.fieldHeight;
+                if (newSettings.fieldWidth !== undefined) SETTINGS.FIELD.WIDTH = newSettings.fieldWidth;
+                if (newSettings.fieldHeight !== undefined) SETTINGS.FIELD.HEIGHT = newSettings.fieldHeight;
 
-                // предотвращение лишнего пересоздания контроллеров при загрузке сохраненных настроек
-                if (!preventReset)
-                    resetHandler();
-            }
-        }
+                if (newSettings.waterChannelCount !== undefined) SETTINGS.WATER_CHANNELS.COUNT_THRESHOLD = newSettings.waterChannelCount;
+                if (newSettings.waterChannelMeanders !== undefined) SETTINGS.WATER_CHANNELS.MEANDERS_THRESHOLD = newSettings.waterChannelMeanders;
+                if (newSettings.waterChannelSegment !== undefined) SETTINGS.WATER_CHANNELS.SEGMENT_THRESHOLD = newSettings.waterChannelSegment;
+
+                resetHandler();
+        }    
 
         if (newSettings.tickInterval !== undefined) {
             SETTINGS.TIME.TICK_INTERVAL_MS = newSettings.tickInterval;
@@ -118,6 +131,18 @@ export default function SettingsPanel({ forestRef, resetHandler, setIsRunningHan
                             min="1" max="15" step="1"
                             value={values.fieldHeight}
                             onChange={(e) => applySettings({ fieldHeight: Number(e.target.value) })}/>
+                    <Slider label={`Макс. кол-во водоёмов: ${values.waterChannelCount} ед.`}
+                            min="0" max="20" step="1"
+                            value={values.waterChannelCount}
+                            onChange={(e) => applySettings({ waterChannelCount: Number(e.target.value) })}/>
+                    <Slider label={`Макс. изгибов водоёмов: ${values.waterChannelMeanders} ед.`}
+                            min="1" max="20" step="1"
+                            value={values.waterChannelMeanders}
+                            onChange={(e) => applySettings({ waterChannelMeanders: Number(e.target.value) })}/>
+                    <Slider label={`Макс. длина сегмента водоёма: ${values.waterChannelSegment} ед.`}
+                            min="1" max="20" step="1"
+                            value={values.waterChannelSegment}
+                            onChange={(e) => applySettings({ waterChannelSegment: Number(e.target.value) })}/>
                     <Slider label={`TPS: ${(1000/values.tickInterval).toFixed(2)}\nИнтервал обновления: ${values.tickInterval} мс`}
                             min="50" max="400" step="10"
                             value={values.tickInterval}

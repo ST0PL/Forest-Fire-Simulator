@@ -4,6 +4,9 @@ import { SEASONS } from "../../cfg/constants";
 export const DEFAULTS = {
     fieldWidth: SETTINGS.FIELD.WIDTH,
     fieldHeight: SETTINGS.FIELD.HEIGHT,
+    waterChannelCount: SETTINGS.WATER_CHANNELS.COUNT_THRESHOLD,
+    waterChannelMeanders: SETTINGS.WATER_CHANNELS.MEANDERS_THRESHOLD,
+    waterChannelSegment: SETTINGS.WATER_CHANNELS.SEGMENT_THRESHOLD,
     tickInterval: SETTINGS.TIME.TICK_INTERVAL_MS,
     burnDuration: SETTINGS.FIRE.BURN_DURATION_TICKS,
     spreadMultiplier: SETTINGS.FIRE.SPREAD_MULTIPLIER,

@@ -1,6 +1,6 @@
 import { SETTINGS, getRandomInt } from '../cfg/settings';
 import { ClimateController } from './climate-controller';
-import { Tree, YoungTree, AdultTree, OldTree, DeadTree, Statistic, Empty } from '../models'
+import { Tree, YoungTree, AdultTree, OldTree, DeadTree, Statistic, Empty, Water } from '../models'
 import { STATES, CREATE_FUNCTIONS } from '../cfg/constants';
 
 export class ForestController {
@@ -39,6 +39,7 @@ export class ForestController {
       }
       matrix.push(row);
     }
+    this.generateWaterChannels(matrix);
     return matrix;
   }
 
@@ -187,12 +188,50 @@ export class ForestController {
     }
   }
 
+
+  generateWaterChannels(matrix) {
+    if(SETTINGS.WATER_CHANNELS.COUNT_THRESHOLD === 0) return;
+
+    const count = getRandomInt(1, SETTINGS.WATER_CHANNELS.COUNT_THRESHOLD);
+
+    for(let i = 0; i < count; i++) {
+      const x = getRandomInt(1, SETTINGS.FIELD.WIDTH);
+      const y = getRandomInt(1, SETTINGS.FIELD.HEIGHT);
+      const meander = getRandomInt(1, SETTINGS.WATER_CHANNELS.MEANDERS_THRESHOLD);
+
+      this.generateWaterChannel(matrix, x, y, meander);
+    }
+  }
+
+  generateWaterChannel(matrix, x, y, meander) {
+    if(meander <= 0)
+      return;
+    
+    const directions = SETTINGS.WATER_CHANNELS.DIRECTIONS;
+
+    for(let i = 0; i < meander; i++) {
+      
+      const segmentLen = getRandomInt(1, SETTINGS.WATER_CHANNELS.SEGMENT_THRESHOLD);
+      const direction = directions[getRandomInt(0, directions.length)];
+      
+      for(let j = 0; j < segmentLen; j++) {
+        if(x >= SETTINGS.FIELD.WIDTH || y >= SETTINGS.FIELD.HEIGHT  || x < 0 || y < 0) {
+          return;
+        }
+
+        matrix[y][x] = new Water(x, y);
+        y += direction.dy;
+        x += direction.dx;
+      }
+    }
+  }
+
   // создание объекта на основе полей модели (т.к. функции при сериализации не сохраняются)
   static createFromObject(object) {
     const forestController = new ForestController(object.width, object.height);
     forestController.tickCount = object.tickCount;
     forestController.climate = ClimateController.createFromObject(object.climate);
-    forestController.cells = object.cells.map(cells => cells.map(cell => Object.assign(CREATE_FUNCTIONS[cell.nativeType](cell.x, cell.y), cell)))
+    forestController.cells = object.cells.map(cells => cells.map(cell => Object.assign(CREATE_FUNCTIONS[cell.nativeType ?? cell.state](cell.x, cell.y), cell)))
     return forestController;
   }
 }

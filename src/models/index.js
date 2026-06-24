@@ -4,4 +4,6 @@ export { AdultTree } from './tree/adult-tree';
 export { OldTree } from './tree/old-tree';
 export { DeadTree } from './tree/dead-tree';
 export { Statistic } from './tree/statistic';
+export { Ash } from './environment/ash';
 export { Empty } from './environment/empty';
+export { Water } from './environment/water';

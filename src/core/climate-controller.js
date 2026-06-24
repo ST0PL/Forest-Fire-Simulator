@@ -22,14 +22,14 @@ export class ClimateController {
     const isRain = [WEATHER.RAINY, WEATHER.STORMY].includes(this.weatherController.getWeather());
 
     // логика засухи (возникает только если нет осадков)
-    if(!isRain && (this.extremeDroughtDuration === 0) && (Math.random() < SETTINGS.CLIMATE.EXTREME_DROUGHT_CHANCE[this.currentSeasonIndex])) {
+    if(!isRain && !this.isExtremeDrought() && (Math.random() < SETTINGS.CLIMATE.EXTREME_DROUGHT_CHANCE[this.currentSeasonIndex])) {
 
       this.extremeDroughtDurationLimit = getRandomInt(1, SETTINGS.CLIMATE.EXTREME_DROUGHT_DURATION_THRESHOLD)
       this.extremeDroughtDuration = 1;
       this.globalMoisture = SETTINGS.MOISTURE.EXTREME_DROUGHT_THRESHOLD;
     }
     
-    else if(this.extremeDroughtDuration > 0) {
+    else if(this.isExtremeDrought()) {
       this.extremeDroughtDuration++;
 
       // засуха заканчивается по истечению предела длительности, либо при наступлении зимы
@@ -87,6 +87,7 @@ export class ClimateController {
   static createFromObject(object) {
     const climateController = Object.assign(new ClimateController(), object);
     climateController.windController = Object.assign(new WindController(), object.windController);
+    climateController.weatherController = Object.assign(new WeatherController(), object.weatherController);
     return climateController;
   }
 }

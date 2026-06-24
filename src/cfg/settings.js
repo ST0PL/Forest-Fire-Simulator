@@ -231,6 +231,17 @@ export const SETTINGS = {
 
     DURATION_THRESHOLD: 50, // верхний порог длительности ветров
     MULTIPLIER: 5.0 // модификатор возгорания при совпадении координат (направления)
+  },
+
+  WATER_CHANNELS: {
+    COUNT_THRESHOLD: 8, // верхний порог количества водоёмов
+    MEANDERS_THRESHOLD: 15, // верхний порог кол-ва изгибов водоёмов
+    SEGMENT_THRESHOLD: 5, // верхний порог длины сегмента водоёма
+    DIRECTIONS: [
+      { dy: -1, dx: -1 }, { dy: -1, dx: 0 }, {dy: -1, dx: 1},
+      { dy: 0, dx: -1 }, {dy: 0, dx: 1},
+      { dy: 1, dx: -1 }, { dy: 1, dx: 0 }, {dy: 1, dx: 1}
+    ]
   }
 };
 
