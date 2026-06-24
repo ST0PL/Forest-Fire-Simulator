@@ -1,6 +1,6 @@
 import { Ash } from "../environment/ash";
 import { SETTINGS, round } from "../../cfg/settings";
-import { SEASONS, STATES } from "../../cfg/constants";
+import { SEASONS, STATES, WEATHER } from "../../cfg/constants";
 import { Cell } from "../cell";
 
 export class Tree extends Cell {
@@ -16,7 +16,8 @@ export class Tree extends Cell {
 
     if (this.state === STATES.FIRE) {
       this.burnDuration++;
-      if(env.seasonIndex === SEASONS.WINTER && Math.random() < SETTINGS.CLIMATE.WINTER_SNOW_EXTINGUISH_CHANCE) {
+      // осадки могут потушить пожар
+      if(Math.random() < SETTINGS.CLIMATE.WEATHER.EXTINGUISH_CHANCES[env.weather]) {
         this.extinguish();
       }
       else if (this.burnDuration >= SETTINGS.FIRE.BURN_DURATION_TICKS) {
@@ -36,7 +37,7 @@ export class Tree extends Cell {
     } 
     
     // высыхание от сухостоя (только при экстремальной жаре)
-    else if (deadTreeNeighborsCount > 0 && env.isExtremeDroughtActive) {
+    else if (deadTreeNeighborsCount > 0 && env.isExtremeDrought) {
       
       // сухостой усиливает потерю влаги, но должен действовать слабее огня
       const baseSpeed = this.getDryingSpeed(env.gMoisture);
@@ -62,17 +63,28 @@ export class Tree extends Cell {
 
     // логика воспламенения
     if (this.state !== STATES.FIRE) {
-      this.processFire(fireNeighbors, deadTreeNeighborsCount, env.isExtremeDroughtActive, env.wind);
+      this.processFire(fireNeighbors, deadTreeNeighborsCount, env.wind, env.weather, env.isExtremeDrought);
     }
   }
 
-  processFire(fireNeighbors, deadTreeNeighborsCount, isExtremeDroughtActive, wind) {
+  processFire(fireNeighbors, deadTreeNeighborsCount, wind, weather, isExtremeDrought) {
+
+    if(this.state === STATES.LIGHTNING) {
+      this.setFire();
+      return;
+    }
+
+    if ((weather === WEATHER.STORMY) && (Math.random() < SETTINGS.CLIMATE.WEATHER.STORM_LIGHTNING_CHANCE)) {
+      this.state = STATES.LIGHTNING;
+      return;
+    }
+
     const baseFireChance = this.getBaseFireChance();
     const drynessFactor = this.getDrynessFactor() // чем суше дерево, тем выше вероятность воспламенения
     const spreadMult = SETTINGS.FIRE.SPREAD_MULTIPLIER;
     const deadTreeFactor = deadTreeNeighborsCount > 0 ? SETTINGS.FIRE.DEADTREE_MULTIPLIER : 1.0;
     
-    // вероятность поспламенения (от случайного источника - "сухие грозы")
+    // вероятность поспламенения (от случайного источника)
     const fireChance = drynessFactor * baseFireChance * deadTreeFactor * spreadMult;
 
     // флаг ориентированности клетки по направлению ветра
@@ -105,7 +117,7 @@ export class Tree extends Cell {
     const hasFireNeighbors = fireNeighbors.length > 0;
     const isCriticalDry = this.moisture < SETTINGS.FIRE.CRITICAL_MOISTURE_THRESHOLD;
 
-    if (hasFireNeighbors || (isExtremeDroughtActive && isCriticalDry)) {
+    if (hasFireNeighbors ||  (isExtremeDrought && isCriticalDry)) {
       // если сейчас не штиль и клетка НЕ ориентирована по ветру  - урезаем базовую вероятность возгорания неориентированных по направлению ветра клеток
       // иначе используется базовый шанс
       if (Math.random() < (wind && !isWindAligned ? fireChance / SETTINGS.WIND_ROSE.MULTIPLIER : fireChance)) {

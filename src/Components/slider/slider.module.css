@@ -9,6 +9,7 @@
 .label span {
     color: #8b949e;
     text-align: start;
+    white-space: pre-line;
 }
 
 input[type="range"] {

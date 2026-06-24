@@ -12,10 +12,12 @@ export class DeadTree extends Tree {
     // логика горения (как у обычного дерева)
     if (this.state === STATES.FIRE) {
       this.burnDuration++;
-      if (env.seasonIndex === SEASONS.WINTER && Math.random() < SETTINGS.CLIMATE.WINTER_SNOW_EXTINGUISH_CHANCE) {
+      // осадки могут потушить пожар
+      if(Math.random() < SETTINGS.CLIMATE.WEATHER.EXTINGUISH_CHANCES[env.weather]) {
         this.extinguish();
-      } else if (this.burnDuration >= SETTINGS.FIRE.BURN_DURATION_TICKS) {
-        env.replaceCell(new Ash(this.x, this.y));
+      }
+      else if (this.burnDuration >= SETTINGS.FIRE.BURN_DURATION_TICKS) {
+        env.replaceCell(new Ash(this.x, this.y))
       }
       return;
     }
@@ -28,7 +30,7 @@ export class DeadTree extends Tree {
     // но логика воспламенения должна работать
 
     if (this.state !== STATES.FIRE) {
-      this.processFire(fireNeighbors, deadTreeNeighborsCount, env.isExtremeDroughtActive, env.wind);
+      this.processFire(fireNeighbors, deadTreeNeighborsCount, env.wind, env.weather, env.isExtremeDrought);
     }
   }
 

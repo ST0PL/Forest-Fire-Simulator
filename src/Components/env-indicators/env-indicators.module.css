@@ -1,13 +1,15 @@
 .mainContainer {
-  display: flex;
-  gap: 15px;
-  flex-wrap: wrap; 
-  justify-content: center;
-  width: 850px;
+  text-align: center;
 }
 
 .indicatorContainer {
   background-color: #151b23;
   padding: 10px;
   border-radius: 10px;
+  display: inline-block; /* Позволяет элементам вставать в одну строку */
+  vertical-align: top;   /* Выравнивает их по верхнему краю, чтобы не прыгали по высоте */
+  background-color: #151b23;
+  padding: 10px;
+  border-radius: 10px;
+  margin: 7.5px;
 }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import styles from './settings-panel.module.css';
 import Button from '../button';
 import { UI_COLORS, SEASONS } from '../../cfg/constants';
@@ -6,39 +6,9 @@ import { SETTINGS } from '../../cfg/settings';
 import Slider from '../slider';
 import Checkbox from '../checkBox';
 import Panel from '../panel';
-
-const DEFAULTS = {
-    fieldWidth: SETTINGS.FIELD.WIDTH,
-    fieldHeight: SETTINGS.FIELD.HEIGHT,
-    tickInterval: SETTINGS.TIME.TICK_INTERVAL_MS,
-    burnDuration: SETTINGS.FIRE.BURN_DURATION_TICKS,
-    spreadMultiplier: SETTINGS.FIRE.SPREAD_MULTIPLIER,
-    criticalMoisture: SETTINGS.FIRE.CRITICAL_MOISTURE_THRESHOLD,
-    springHumidity: SETTINGS.CLIMATE.HUMIDITY[SEASONS.SPRING],
-    summerHumidity: SETTINGS.CLIMATE.HUMIDITY[SEASONS.SUMMER],
-    autumnHumidity: SETTINGS.CLIMATE.HUMIDITY[SEASONS.AUTUMN],
-    winterHumidity: SETTINGS.CLIMATE.HUMIDITY[SEASONS.WINTER],
-    windDurationThreshold: SETTINGS.WIND_ROSE.DURATION_THRESHOLD,
-    windMultiplier: SETTINGS.WIND_ROSE.MULTIPLIER,
-    springDroughtChance: SETTINGS.CLIMATE.EXTREME_DROUGHT_CHANCE[SEASONS.SPRING],
-    summerDroughtChance: SETTINGS.CLIMATE.EXTREME_DROUGHT_CHANCE[SEASONS.SUMMER],
-    autumnDroughtChance: SETTINGS.CLIMATE.EXTREME_DROUGHT_CHANCE[SEASONS.AUTUMN],
-    droughtThreshold: SETTINGS.CLIMATE.EXTREME_DROUGHT_DURATION_THRESHOLD,
-    stressAccumulationRate: SETTINGS.OLD_TREE.STRESS_ACCUMULATION_RATE,
-    stressEvaporateRate: SETTINGS.OLD_TREE.STRESS_EVAPORATE_RATE,
-    heatStressThreshold: SETTINGS.OLD_TREE.HEAT_STRESS_THRESHOLD,
-    stressChance: SETTINGS.OLD_TREE.STRESS_CHANCE,
-    seasonDuration: SETTINGS.CLIMATE.SEASON_DURATION_TICKS,
-    regenChance: SETTINGS.REGENERATION.BASE_CHANCE_PER_TICK,
-    youngToAdultAge: SETTINGS.GROWTH.YOUNG_TO_ADULT_AGE,
-    adultToOldAge: SETTINGS.GROWTH.ADULT_TO_OLD_AGE,
-    growthEnabled: SETTINGS.GROWTH.GROWTH_ENABLED,
-    regenerationEnabled: SETTINGS.REGENERATION.REGENERATION_ENABLED,
-    minRecoveryTime: SETTINGS.REGENERATION.MIN_RECOVERY_TIME,
-};
+import { DEFAULTS } from './Defaults';
 
 export default function SettingsPanel({ forestRef, resetHandler, setIsRunningHandler, setTickIntervalHandler }) {
-
   
     const [values, setValues] = useState({ ...DEFAULTS });
 
@@ -74,6 +44,9 @@ export default function SettingsPanel({ forestRef, resetHandler, setIsRunningHan
 
         if (newSettings.windDurationThreshold !== undefined) SETTINGS.WIND_ROSE.DURATION_THRESHOLD = newSettings.windDurationThreshold;
         if (newSettings.windMultiplier !== undefined) SETTINGS.WIND_ROSE.MULTIPLIER = newSettings.windMultiplier;
+
+        if (newSettings.weatherEnabled !== undefined) SETTINGS.CLIMATE.WEATHER.ENABLED = newSettings.weatherEnabled;
+        if (newSettings.lightningChance !== undefined) SETTINGS.CLIMATE.WEATHER.STORM_LIGHTNING_CHANCE = newSettings.lightningChance;
 
         if (newSettings.springDroughtChance !== undefined) SETTINGS.CLIMATE.EXTREME_DROUGHT_CHANCE[SEASONS.SPRING] = newSettings.springDroughtChance;
         if (newSettings.summerDroughtChance !== undefined) SETTINGS.CLIMATE.EXTREME_DROUGHT_CHANCE[SEASONS.SUMMER] = newSettings.summerDroughtChance;
@@ -145,103 +118,114 @@ export default function SettingsPanel({ forestRef, resetHandler, setIsRunningHan
                             min="1" max="15" step="1"
                             value={values.fieldHeight}
                             onChange={(e) => applySettings({ fieldHeight: Number(e.target.value) })}/>
-                    <Slider label={`Скорость: ${values.tickInterval} мс`}
+                    <Slider label={`TPS: ${(1000/values.tickInterval).toFixed(2)}\nИнтервал обновления: ${values.tickInterval} мс`}
                             min="50" max="400" step="10"
                             value={values.tickInterval}
                             onChange={(e) => applySettings({ tickInterval: Number(e.target.value) })}/>
                 </div>
 
                 <div className={styles.group}>
-                    <div className={styles.header}>Пожар</div>
-                    <Slider label={`Длительность горения: ${values.burnDuration} тиков`}
-                            min="1" max="5" step="1"
-                            value={values.burnDuration}
-                            onChange={(e) => applySettings({ burnDuration: Number(e.target.value) })} />
-                    <Slider label={`Распространение: ${(values.spreadMultiplier * 100).toFixed(0)}%`}
-                            min="0.1" max="1.0" step="0.05"
-                            value={values.spreadMultiplier}
-                            onChange={(e) => applySettings({ spreadMultiplier: Number(e.target.value) })} />
-                    <Slider label={`Порог влажности: ${values.criticalMoisture}%`}
-                            min="10" max="40" step="1"
-                            value={values.criticalMoisture}
-                            onChange={(e) => applySettings({ criticalMoisture: Number(e.target.value) })} />
+                        <div className={styles.header}>Пожар</div>
+                        <Slider label={`Длительность горения: ${values.burnDuration} тиков`}
+                                min="1" max="5" step="1"
+                                value={values.burnDuration}
+                                onChange={(e) => applySettings({ burnDuration: Number(e.target.value) })} />
+                        <Slider label={`Распространение: ${(values.spreadMultiplier * 100).toFixed(0)}%`}
+                                min="0.1" max="2.0" step="0.05"
+                                value={values.spreadMultiplier}
+                                onChange={(e) => applySettings({ spreadMultiplier: Number(e.target.value) })} />
+                        <Slider label={`Порог влажности: ${values.criticalMoisture}%`}
+                                min="10" max="40" step="1"
+                                value={values.criticalMoisture}
+                                onChange={(e) => applySettings({ criticalMoisture: Number(e.target.value) })} />
                 </div>
 
                 <div className={styles.group}>
-                    <div className={styles.header}>Влажность</div>
-                    <Slider label={`Весна: ${values.springHumidity}%`}
-                            min="15" max="100" step="1"
-                            value={values.springHumidity}
-                            onChange={(e) => applySettings({ springHumidity: Number(e.target.value) })} />
-                    <Slider label={`Лето: ${values.summerHumidity}%`}
-                            min="15" max="100" step="1"
-                            value={values.summerHumidity}
-                            onChange={(e) => applySettings({ summerHumidity: Number(e.target.value) })} />
-                    <Slider label={`Осень: ${values.autumnHumidity}%`}
-                            min="15" max="100" step="1"
-                            value={values.autumnHumidity}
-                            onChange={(e) => applySettings({ autumnHumidity: Number(e.target.value) })} />
-                    <Slider label={`Зима: ${values.winterHumidity}%`}
-                            min="15" max="100" step="1"
-                            value={values.winterHumidity}
-                            onChange={(e) => applySettings({ winterHumidity: Number(e.target.value) })} />
+                        <div className={styles.header}>Влажность</div>
+                        <Slider label={`Весна: ${values.springHumidity}%`}
+                                min="15" max="100" step="1"
+                                value={values.springHumidity}
+                                onChange={(e) => applySettings({ springHumidity: Number(e.target.value) })} />
+                        <Slider label={`Лето: ${values.summerHumidity}%`}
+                                min="15" max="100" step="1"
+                                value={values.summerHumidity}
+                                onChange={(e) => applySettings({ summerHumidity: Number(e.target.value) })} />
+                        <Slider label={`Осень: ${values.autumnHumidity}%`}
+                                min="15" max="100" step="1"
+                                value={values.autumnHumidity}
+                                onChange={(e) => applySettings({ autumnHumidity: Number(e.target.value) })} />
+                        <Slider label={`Зима: ${values.winterHumidity}%`}
+                                min="15" max="100" step="1"
+                                value={values.winterHumidity}
+                                onChange={(e) => applySettings({ winterHumidity: Number(e.target.value) })} />
                 </div>
 
                 
                 <div className={styles.group}>
-                    <div className={styles.header}>Ветер</div>
-                    <Slider label={`Максимальная длительность: ${values.windDurationThreshold} тиков`}
-                            min="1" max="50" step="1"
-                            value={values.windDurationThreshold}
-                            onChange={(e) => applySettings({ windDurationThreshold: Number(e.target.value) })} />
-                    <Slider label={`Сила переноса пламени: ${values.windMultiplier.toFixed(1)} ед.`}
-                            min="1" max="5" step="0.1"
-                            value={values.windMultiplier}
-                            onChange={(e) => applySettings({ windMultiplier: Number(e.target.value) })} />
+                        <div className={styles.header}>Ветер</div>
+                        <Slider label={`Максимальная длительность: ${values.windDurationThreshold} тиков`}
+                                min="1" max="50" step="1"
+                                value={values.windDurationThreshold}
+                                onChange={(e) => applySettings({ windDurationThreshold: Number(e.target.value) })} />
+                        <Slider label={`Сила переноса пламени: ${values.windMultiplier.toFixed(1)} ед.`}
+                                min="1" max="10" step="0.1"
+                                value={values.windMultiplier}
+                                onChange={(e) => applySettings({ windMultiplier: Number(e.target.value) })} />
+                </div>
+                
+                <div className={styles.group}>
+                        <div className={styles.header}>Погода</div>
+                        <Checkbox label={'Смена погоды'}
+                                  checked={values.weatherEnabled}
+                                  onChange={(e) => applySettings({ weatherEnabled: e.target.checked })} />
+                        <Slider label={`Шанс удара молнией в грозу: ${(values.lightningChance * 100).toFixed(1)}%`}
+                                min="0" max="0.50" step="0.001"
+                                value={values.lightningChance}
+                                onChange={(e) => applySettings({ lightningChance: Number(e.target.value) })} />
                 </div>
 
                 <div className={styles.group}>
-                    <div className={styles.header}>Засуха</div>
-                    <Slider label={`Риск засухи (весна): ${(values.springDroughtChance * 100).toFixed(1)}‰`}
-                            min="0" max="0.10" step="0.001"
-                            value={values.springDroughtChance}
-                            onChange={(e) => applySettings({ springDroughtChance: Number(e.target.value) })} />
-                    <Slider label={`Риск засухи (лето): ${(values.summerDroughtChance * 100).toFixed(1)}‰`}
-                            min="0" max="0.10" step="0.001"
-                            value={values.summerDroughtChance}
-                            onChange={(e) => applySettings({ summerDroughtChance: Number(e.target.value) })} />
-                    <Slider label={`Риск засухи (осень): ${(values.autumnDroughtChance * 100).toFixed(1)}‰`}
-                            min="0" max="0.10" step="0.001"
-                            value={values.autumnDroughtChance}
-                            onChange={(e) => applySettings({ autumnDroughtChance: Number(e.target.value) })} />
-                    <Slider label={`Максимальная длительность: ${values.droughtThreshold} тиков`}
-                            min="0" max="40" step="1"
-                            value={values.droughtThreshold}
-                            onChange={(e) => applySettings({ droughtThreshold: Number(e.target.value) })} />
+                        <div className={styles.header}>Засуха</div>
+                        <Slider label={`Риск засухи (весна): ${(values.springDroughtChance * 100).toFixed(1)}‰`}
+                                min="0" max="0.10" step="0.001"
+                                value={values.springDroughtChance}
+                                onChange={(e) => applySettings({ springDroughtChance: Number(e.target.value) })} />
+                        <Slider label={`Риск засухи (лето): ${(values.summerDroughtChance * 100).toFixed(1)}‰`}
+                                min="0" max="0.10" step="0.001"
+                                value={values.summerDroughtChance}
+                                onChange={(e) => applySettings({ summerDroughtChance: Number(e.target.value) })} />
+                        <Slider label={`Риск засухи (осень): ${(values.autumnDroughtChance * 100).toFixed(1)}‰`}
+                                min="0" max="0.10" step="0.001"
+                                value={values.autumnDroughtChance}
+                                onChange={(e) => applySettings({ autumnDroughtChance: Number(e.target.value) })} />
+                        <Slider label={`Максимальная длительность: ${values.droughtThreshold} тиков`}
+                                min="0" max="40" step="1"
+                                value={values.droughtThreshold}
+                                onChange={(e) => applySettings({ droughtThreshold: Number(e.target.value) })} />
                 </div>
 
                 <div className={styles.group}>
-                    <div className={styles.header}>Гидравлический стресс</div>
-                    <Slider label={`Накопление стресса: ${(values.stressAccumulationRate).toFixed(2)} ед./тик`}
-                            min="0" max="2" step="0.01"
-                            value={values.stressAccumulationRate}
-                            onChange={(e) => applySettings({ stressAccumulationRate: Number(e.target.value) })} />
-                    <Slider label={`Снижение стресса: ${(values.stressEvaporateRate).toFixed(2)} ед./тик`}
-                            min="0" max="2" step="0.01"
-                            value={values.stressEvaporateRate}
-                            onChange={(e) => applySettings({ stressEvaporateRate: Number(e.target.value) })} />
-                    <Slider label={`Порог для засыхания: ${(values.heatStressThreshold).toFixed(2)} ед.`}
-                            min="0" max="30" step="0.01"
-                            value={values.heatStressThreshold}
-                            onChange={(e) => applySettings({ heatStressThreshold: Number(e.target.value) })} />
-                    <Slider label={`Шанс получения ед. стресса: ${(values.stressChance*100).toFixed(0)}%`}
-                            min="0" max="1" step="0.01"
-                            value={values.stressChance}
-                            onChange={(e) => applySettings({ stressChance: Number(e.target.value) })} />
+                        <div className={styles.header}>Гидравлический стресс</div>
+                        <Slider label={`Накопление стресса: ${(values.stressAccumulationRate).toFixed(2)} ед./тик`}
+                                min="0" max="2" step="0.01"
+                                value={values.stressAccumulationRate}
+                                onChange={(e) => applySettings({ stressAccumulationRate: Number(e.target.value) })} />
+                        <Slider label={`Снижение стресса: ${(values.stressEvaporateRate).toFixed(2)} ед./тик`}
+                                min="0" max="2" step="0.01"
+                                value={values.stressEvaporateRate}
+                                onChange={(e) => applySettings({ stressEvaporateRate: Number(e.target.value) })} />
+                        <Slider label={`Порог для засыхания: ${(values.heatStressThreshold).toFixed(2)} ед.`}
+                                min="0" max="30" step="0.01"
+                                value={values.heatStressThreshold}
+                                onChange={(e) => applySettings({ heatStressThreshold: Number(e.target.value) })} />
+                        <Slider label={`Шанс получения ед. стресса: ${(values.stressChance*100).toFixed(0)}%`}
+                                min="0" max="1" step="0.01"
+                                value={values.stressChance}
+                                onChange={(e) => applySettings({ stressChance: Number(e.target.value) })} />
                 </div>
 
                 <div className={styles.group}>
-                    <div className={styles.header}>Экосистема</div>
+                        <div className={styles.header}>Экосистема</div>
                         <Slider label={`Длительность сезона: ${(values.seasonDuration)} тиков`}
                                 min="1" max="90" step="1"
                                 value={values.seasonDuration}

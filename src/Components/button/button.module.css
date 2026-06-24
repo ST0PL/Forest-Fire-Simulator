@@ -2,7 +2,7 @@
   padding: 10px 20px;
   font-weight: bold;
   cursor: pointer;
-  background-color: var(--btn-bg);
+  background: var(--btn-bg);
   color: var(--btn-fg);
   border: none;
   border-radius: 4px;

@@ -38,7 +38,7 @@ export default function ControlPanel({ forestRef, resetHandler, stepHandler, set
             <Button onClick={resetHandler} background={UI_COLORS.BTN_RESET}>Сброс состояния</Button>
             <Button onClick={handleClear} background={UI_COLORS.BTN_CLEAR}>Очистка поля</Button>
             <Button onClick={handleSave} background={UI_COLORS.BTN_SAVE}>Сохранить</Button>
-            <Button onClick={handleLoad} background={UI_COLORS.BTN_RESET}>Загрузить</Button>
+            <Button onClick={handleLoad} background={UI_COLORS.BTN_LOAD}>Загрузить</Button>
         </div>
     );
 }

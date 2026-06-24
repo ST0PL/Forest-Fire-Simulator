@@ -22,6 +22,7 @@ export default function App() {
   const [selectedCell, setSelectedCell] = useState(null);
   const [season, setSeason] = useState(forestRef.current.getClimate().getSeasonName());
   const [wind, setWind] = useState(forestRef.current.getClimate().getWindDirectionName());
+  const [weather, setWeather] = useState(forestRef.current.getClimate().getWeatherName());
   const [airMoisture, setAirMoisture] = useState(forestRef.current.getClimate().getMoisture());
   const [ticks, setTicks] = useState(0);
   const [tickInterval, setTickInterval] = useState(SETTINGS.TIME.TICK_INTERVAL_MS);
@@ -37,6 +38,7 @@ export default function App() {
   const handleStep = () => {
       setSeason(forestRef.current.getClimate().getSeasonName());
       setWind(forestRef.current.getClimate().getWindDirectionName());
+      setWeather(forestRef.current.getClimate().getWeatherName());
       setTicks(forestRef.current.getTicks());
       const nextGrid = forestRef.current.tick();
       refreshGrid();
@@ -53,6 +55,7 @@ export default function App() {
       forestRef.current = new ForestController(SETTINGS.FIELD.WIDTH, SETTINGS.FIELD.HEIGHT);
       setSeason(forestRef.current.getClimate().getSeasonName());
       setWind(forestRef.current.getClimate().getWindDirectionName());
+      setWeather(forestRef.current.getClimate().getWeatherName());
       setTicks(0);
       setIsRunning(false);
       refreshGrid();
@@ -76,6 +79,7 @@ export default function App() {
 
         <EnvironmentIndicators season={season}
                                wind={wind}
+                               weather={weather}
                                airMoisture={airMoisture}
                                ticks={ticks} />
                                

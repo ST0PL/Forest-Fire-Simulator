@@ -15,6 +15,7 @@ export const STATES = {
   DEAD: 4,
   FIRE: 5,
   ASH: 6,
+  LIGHTNING: 7,
 }
 
 export const WIND_DIRECTIONS = {
@@ -29,6 +30,12 @@ export const WIND_DIRECTIONS = {
   C: 8
 }
 
+export const WEATHER = {
+  CLEAR: 0,
+  RAINY: 1,
+  STORMY: 2
+}
+
 export const WIND_DIRECTION_NAMES = {
   [WIND_DIRECTIONS.N]: 'Северный ↓',
   [WIND_DIRECTIONS.S]: 'Южный ↑',
@@ -41,12 +48,19 @@ export const WIND_DIRECTION_NAMES = {
   [WIND_DIRECTIONS.C]: 'Штиль',
 }
 
+export const WEATHER_NAMES = {
+  [WEATHER.CLEAR]: "Ясно ☀️",
+  [WEATHER.RAINY]: ["Дождь 🌧️", "Снегопад ❄️"],
+  [WEATHER.STORMY]: ["Гроза ⛈️", "Ливневый снегопад 🌨"]
+}
+
 export const COLORS = {
   [STATES.EMPTY]: '#262626', // пустой участок
   [STATES.YOUNG]: '#81c784', // молодое дерево
   [STATES.ADULT]: '#2e7d32', // зрелое дерево
   [STATES.OLD]: '#1b5e20', // старое дерево
   [STATES.DEAD]: '#5d4037', // сухостой
+  [STATES.LIGHTNING]: '#b388ff', // удал молнией
   [STATES.FIRE]: '#d84315', // очаг возгорания
   [STATES.ASH]: '#757575', // выжженный участок
 };
@@ -66,6 +80,7 @@ export const STATE_NAMES = {
   [STATES.DEAD]: 'Сухостой',
   [STATES.FIRE]: 'Очаг возгорания',
   [STATES.ASH]: 'Выжженный участок',
+  [STATES.LIGHTNING]: 'Молния',
 };
 
 // набор функций для создания объектов деревьев после десериализации клеток
@@ -85,17 +100,16 @@ export const UI_COLORS = {
   BORDER_SUMMER: '#bb86fc',
   BORDER_AUTUMN: '#ffb74d',
   TEXT_MOISTURE: '#4caf50',
-  BTN_PAUSE: '#c62828',
-  BTN_START: '#2e7d32',
-  BTN_STEP: '#93ae32',
-  BTN_RESET: '#555',
-  BTN_CLEAR: '#555',
+  BTN_STEP: '#2b3849',
+  BTN_START: '#2b3849',
+  BTN_PAUSE: '#2b3849',
+  BTN_RESET: '#2b3849',
+  BTN_CLEAR: '#2b3849',
+  BTN_SAVE: '#2b3849',
+  BTN_LOAD: '#2b3849',  
   BTN_FIRE: '#d84315',
   BTN_EXTINGUISH: '#1594d8',
   BTN_DEAD: '#5d4037',
   BTN_CREATE: '#1cd951',
   BTN_DELETE: 'red',
-  BTN_SAVE: '#555',
-  BTN_LOAD: '#555',
-  HR_BORDER: '#444'
 };

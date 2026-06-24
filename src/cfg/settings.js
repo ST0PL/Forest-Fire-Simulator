@@ -1,4 +1,4 @@
-import { SEASONS, WIND_DIRECTIONS } from "./constants";
+import { SEASONS, WEATHER, WIND_DIRECTIONS } from "./constants";
 
 // параметры симуляции
 
@@ -15,24 +15,58 @@ export const SETTINGS = {
     TICK_INTERVAL_MS: 140,      // интервал одного тика (скорость симуляции)
   },
 
-// влажность по сезонам
   CLIMATE: {
     SEASON_DURATION_TICKS: 40, // кол-во тиков на один сезон
     HUMIDITY: {
-      [SEASONS.SPRING]: 75, // весна
-      [SEASONS.SUMMER]: 20, // лето, засуха, высокий риск пожара
-      [SEASONS.AUTUMN]: 90, // осень, дожди, низкий риск пожара
+      [SEASONS.SPRING]: 70, // весна
+      [SEASONS.SUMMER]: 50, // лето, засуха, высокий риск пожара
+      [SEASONS.AUTUMN]: 80, // осень, дожди, низкий риск пожара
       [SEASONS.WINTER]: 30 // зима
     },
-    // зимой есть вероятность, что снег потушит огонь за один тик
-    WINTER_SNOW_EXTINGUISH_CHANCE: 0.35,
     EXTREME_DROUGHT_CHANCE: {
       [SEASONS.SPRING]: 0.005, // весна
       [SEASONS.SUMMER]: 0.040, // лето, высокий риск экстремальной засухи
       [SEASONS.AUTUMN]: 0.001, // осень, дождливый сезон, низкая вероятность возникновения засухи
       [SEASONS.WINTER]: 0 // зима
      },
-    EXTREME_DROUGHT_DURATION_THRESHOLD: 20// верхний порог длительности засухи 
+    EXTREME_DROUGHT_DURATION_THRESHOLD: 20, // верхний порог длительности засухи
+    WEATHER: {
+      ENABLED: true,
+      WEATHER_DURATION_THRESHOLD: 20, // верхний порог длительности погоды
+      CHANCES: {
+        [SEASONS.SPRING]: {
+          [WEATHER.CLEAR]: 0.65, // в основном ясно/переменная облачность
+          [WEATHER.RAINY]: 0.33, // около 10-11 дождливых дней в месяц (апрель-май)
+          [WEATHER.STORMY]: 0.02, // весенние грозы — большая редкость (редко в конце мая)
+        },
+        [SEASONS.SUMMER]: {
+          [WEATHER.CLEAR]: 0.75, // большую часть времени солнечно
+          [WEATHER.RAINY]: 0.15,
+          [WEATHER.STORMY]: 0.10,
+        },
+        [SEASONS.AUTUMN]: {
+          [WEATHER.CLEAR]: 0.60, // ясная погода, сменяющееся пасмурными днями
+          [WEATHER.RAINY]: 0.40, // затяжные осенние дожди (сентябрь-октябрь)
+          [WEATHER.STORMY]: 0.00,
+        },
+        [SEASONS.WINTER]: {
+          [WEATHER.CLEAR]: 0.65,
+          [WEATHER.RAINY]: 0.349,
+          [WEATHER.STORMY]: 0.001,
+        },
+      },
+      HUMIDITY_MULTIPLIERS: {
+        [WEATHER.CLEAR]: 0.85,
+        [WEATHER.RAINY]: 1.15,
+        [WEATHER.STORMY]: 1.25
+      },
+      EXTINGUISH_CHANCES: {
+        [WEATHER.RAINY]: 0.10,
+        [WEATHER.STORMY]: 0.20,
+      },
+
+      STORM_LIGHTNING_CHANCE: 0.001 // шанс удара молнией в грозу
+    }
   },
 
   // параметры влажности
@@ -54,7 +88,7 @@ export const SETTINGS = {
   // параметры воспламенения
   FIRE: {
     BURN_DURATION_TICKS: 3, // кол-во тиков на горение дерева до превращения в пепел
-    SPREAD_MULTIPLIER: 0.75,  // общий множитель шанса возгорания
+    SPREAD_MULTIPLIER: 0.80,  // общий множитель шанса возгорания
     CRITICAL_MOISTURE_THRESHOLD: 12, // если влажность дерева < этого, то летом дерево может самовозгореться
     DEADTREE_MULTIPLIER: 2.0, // вклад сухостоя в воспламенение (тепловой проводник)
   },

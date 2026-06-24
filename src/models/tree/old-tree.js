@@ -15,7 +15,7 @@ export class OldTree extends Tree {
     this.age++;
     // логика сухостоя
 
-    if (env.isExtremeDroughtActive) {
+    if (env.isExtremeDrought) {
 
         // при экстремальной жаре дерево блокирует потерю влаги (защитный механизм)
         // но накапливает "стресс" (углеродное голодание / эмболия)
@@ -66,9 +66,5 @@ export class OldTree extends Tree {
 
   getStress() {
     return this.stress;
-  }
-
-  setStress(value) {
-    this.stress = value;
   }
 }

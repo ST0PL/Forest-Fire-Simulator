@@ -73,8 +73,9 @@ export class ForestController {
         const env = {
           seasonIndex: this.climate.getSeasonIndex(),
           gMoisture:  this.climate.getMoisture(),
-          isExtremeDroughtActive: this.climate.isExtremeDroughtActive(),
+          isExtremeDrought: this.climate.isExtremeDrought(),
           wind: SETTINGS.WIND_ROSE.DIRECTIONS[this.climate.getWindController().getDirection()],
+          weather: this.climate.getWeatherController().getWeather(),
           neighbors: this.getNeighbors(current),
           replaceCell: (cell) => this.replaceCell(cell),
           createCell: (x, y, state) => this.createCell(x, y, state)

@@ -13,7 +13,7 @@ export class Empty extends Cell {
             const seasonMultiplier = SETTINGS.REGENERATION.SEASON_MULTIPLIERS[env.seasonIndex];
             const appearanceChance = SETTINGS.REGENERATION.BASE_CHANCE_PER_TICK * seasonMultiplier;
         
-            if (Math.random() < appearanceChance) {
+            if (!env.isExtremeDroughts && (Math.random() < appearanceChance)) {
                 env.replaceCell(new YoungTree(this.x, this.y));
             }
         }
