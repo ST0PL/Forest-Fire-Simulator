@@ -24,11 +24,6 @@ export default function SettingsPanel({ forestRef, resetHandler, setIsRunningHan
                 const meandersThreshold = SETTINGS.WATER_CHANNELS.MEANDERS_THRESHOLD;
                 const segmentThreshold = SETTINGS.WATER_CHANNELS.SEGMENT_THRESHOLD;
 
-                if (newSettings.fieldWidth === width && newSettings.fieldHeight === height &&
-                   newSettings.waterChannelCount === countThreshold && newSettings.waterChannelMeanders === meandersThreshold && newSettings.waterChannelSegment === segmentThreshold) {
-                        return;
-                }
-
                 setIsRunningHandler(false);
 
                 if (newSettings.fieldWidth !== undefined) SETTINGS.FIELD.WIDTH = newSettings.fieldWidth;
