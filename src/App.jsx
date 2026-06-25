@@ -13,7 +13,9 @@ import StatisticBlock from './Components/statistic-block';
 import EnvironmentIndicators from './Components/env-indicators';
 
 
+
 export default function App() {
+
   const forestRef = useRef(new ForestController(SETTINGS.FIELD.WIDTH, SETTINGS.FIELD.HEIGHT));
 
   const [cells, setCells] = useState(forestRef.current.getCells());
@@ -68,8 +70,7 @@ export default function App() {
     <div style={ { display: 'flex', fontFamily: 'monospace', backgroundColor: '#0d1117', color: '#fff', minHeight: '100vh' } }>
 
       <div style={ { display: 'flex', flexDirection: 'column', gap: '10px', margin: '10px 10px' } }>
-        <SettingsPanel forestRef={forestRef}
-                       resetHandler={handleReset}
+        <SettingsPanel resetHandler={handleReset}
                        setIsRunningHandler={setIsRunning}
                        setTickIntervalHandler={setTickInterval} />
       </div>
