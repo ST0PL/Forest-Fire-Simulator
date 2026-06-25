@@ -7,111 +7,34 @@ import Slider from '../slider';
 import Checkbox from '../checkBox';
 import Panel from '../panel';
 import { DEFAULTS } from './Defaults';
+import { applySettingsConfig, getSettings} from './SettingsHelper';
 
-export default function SettingsPanel({ forestRef, resetHandler, setIsRunningHandler, setTickIntervalHandler }) {
-  
+export default function SettingsPanel({ resetHandler, setIsRunningHandler, setTickIntervalHandler }) {
+    
     const [values, setValues] = useState({ ...DEFAULTS });
 
-    // применение параметров (изменение данных в SETTINGS, обновление ui панели и сохранение в локальное хранилище)
+
     const applySettings = (newSettings) => {
-        
-        if (newSettings.fieldWidth !== undefined || newSettings.fieldHeight !== undefined ||
-            newSettings.waterChannelCount !== undefined || newSettings.waterChannelMeanders !== undefined || newSettings.waterChannelSegment) {
 
-                const width = SETTINGS.FIELD.WIDTH;
-                const height = SETTINGS.FIELD.HEIGHT;
-                const countThreshold = SETTINGS.WATER_CHANNELS.COUNT_THRESHOLD;
-                const meandersThreshold = SETTINGS.WATER_CHANNELS.MEANDERS_THRESHOLD;
-                const segmentThreshold = SETTINGS.WATER_CHANNELS.SEGMENT_THRESHOLD;
-
-                setIsRunningHandler(false);
-
-                if (newSettings.fieldWidth !== undefined) SETTINGS.FIELD.WIDTH = newSettings.fieldWidth;
-                if (newSettings.fieldHeight !== undefined) SETTINGS.FIELD.HEIGHT = newSettings.fieldHeight;
-
-                if (newSettings.waterChannelCount !== undefined) SETTINGS.WATER_CHANNELS.COUNT_THRESHOLD = newSettings.waterChannelCount;
-                if (newSettings.waterChannelMeanders !== undefined) SETTINGS.WATER_CHANNELS.MEANDERS_THRESHOLD = newSettings.waterChannelMeanders;
-                if (newSettings.waterChannelSegment !== undefined) SETTINGS.WATER_CHANNELS.SEGMENT_THRESHOLD = newSettings.waterChannelSegment;
-
-                resetHandler();
-        }    
-
-        if (newSettings.tickInterval !== undefined) {
-            SETTINGS.TIME.TICK_INTERVAL_MS = newSettings.tickInterval;
-            setTickIntervalHandler(SETTINGS.TIME.TICK_INTERVAL_MS);
-        }
-        
-        if (newSettings.burnDuration !== undefined) SETTINGS.FIRE.BURN_DURATION_TICKS = newSettings.burnDuration;
-        if (newSettings.spreadMultiplier !== undefined) SETTINGS.FIRE.SPREAD_MULTIPLIER = newSettings.spreadMultiplier;
-        if (newSettings.criticalMoisture !== undefined) SETTINGS.FIRE.CRITICAL_MOISTURE_THRESHOLD = newSettings.criticalMoisture;
-        
-        if (newSettings.springHumidity !== undefined) SETTINGS.CLIMATE.HUMIDITY[SEASONS.SPRING] = newSettings.springHumidity;
-        if (newSettings.summerHumidity !== undefined) SETTINGS.CLIMATE.HUMIDITY[SEASONS.SUMMER] = newSettings.summerHumidity;
-        if (newSettings.autumnHumidity !== undefined) SETTINGS.CLIMATE.HUMIDITY[SEASONS.AUTUMN] = newSettings.autumnHumidity;
-        if (newSettings.winterHumidity !== undefined) SETTINGS.CLIMATE.HUMIDITY[SEASONS.WINTER] = newSettings.winterHumidity;
-
-        if (newSettings.windDurationThreshold !== undefined) SETTINGS.WIND_ROSE.DURATION_THRESHOLD = newSettings.windDurationThreshold;
-        if (newSettings.windMultiplier !== undefined) SETTINGS.WIND_ROSE.MULTIPLIER = newSettings.windMultiplier;
-
-        if (newSettings.weatherEnabled !== undefined) SETTINGS.CLIMATE.WEATHER.ENABLED = newSettings.weatherEnabled;
-        if (newSettings.lightningChance !== undefined) SETTINGS.CLIMATE.WEATHER.STORM_LIGHTNING_CHANCE = newSettings.lightningChance;
-
-        if (newSettings.springDroughtChance !== undefined) SETTINGS.CLIMATE.EXTREME_DROUGHT_CHANCE[SEASONS.SPRING] = newSettings.springDroughtChance;
-        if (newSettings.summerDroughtChance !== undefined) SETTINGS.CLIMATE.EXTREME_DROUGHT_CHANCE[SEASONS.SUMMER] = newSettings.summerDroughtChance;
-        if (newSettings.autumnDroughtChance !== undefined) SETTINGS.CLIMATE.EXTREME_DROUGHT_CHANCE[SEASONS.AUTUMN] = newSettings.autumnDroughtChance;
-
-        if(newSettings.stressAccumulationRate !== undefined) SETTINGS.OLD_TREE.STRESS_ACCUMULATION_RATE = newSettings.stressAccumulationRate;
-        if(newSettings.stressEvaporateRate !== undefined) SETTINGS.OLD_TREE.STRESS_EVAPORATE_RATE = newSettings.stressEvaporateRate;
-        if(newSettings.heatStressThreshold !== undefined) SETTINGS.OLD_TREE.HEAT_STRESS_THRESHOLD = newSettings.heatStressThreshold;
-        if(newSettings.stressChance !== undefined) SETTINGS.OLD_TREE.STRESS_CHANCE = newSettings.stressChance;
-
-        if (newSettings.droughtThreshold !== undefined) SETTINGS.CLIMATE.EXTREME_DROUGHT_DURATION_THRESHOLD = newSettings.droughtThreshold;
-        if (newSettings.seasonDuration !== undefined) SETTINGS.CLIMATE.SEASON_DURATION_TICKS = newSettings.seasonDuration;
-        
-        if (newSettings.growthEnabled !== undefined) SETTINGS.GROWTH.GROWTH_ENABLED = newSettings.growthEnabled;
-        if (newSettings.youngToAdultAge !== undefined) SETTINGS.GROWTH.YOUNG_TO_ADULT_AGE = newSettings.youngToAdultAge;
-        if (newSettings.adultToOldAge !== undefined) SETTINGS.GROWTH.ADULT_TO_OLD_AGE = newSettings.adultToOldAge;
-
-        if (newSettings.regenChance !== undefined) SETTINGS.REGENERATION.BASE_CHANCE_PER_TICK = newSettings.regenChance;
-        if (newSettings.regenerationEnabled !== undefined) SETTINGS.REGENERATION.REGENERATION_ENABLED = newSettings.regenerationEnabled;
-        if (newSettings.minRecoveryTime !== undefined) SETTINGS.REGENERATION.MIN_RECOVERY_TIME = newSettings.minRecoveryTime;
-
-        // наложение новых параметров на существующие
+        const needRebuild = applySettingsConfig(newSettings, setIsRunningHandler, setTickIntervalHandler);
         const updated = { ...values, ...newSettings };
-        
-        // обновление состояния параметров для ui панели
-        setValues(updated);
-        
-        // сохранение объекта параметров в браузер
+        setValues(updated);    
         localStorage.setItem('forestSim_settings', JSON.stringify(updated));
-    };
 
-    // инициализация исключительно при первой загрузке компонента путем передачи пустого массива зависимостей
-    useEffect(() => {
-        const saved = localStorage.getItem('forestSim_settings');
-        if (saved) {
-        try {
-            const parsed = JSON.parse(saved);
-            applySettings(parsed, true);
-        } catch (e) {
-            console.error('При загрузке настроек произошла ошибка', e);
-        }
-        } 
-        else {
-            // если сохранения нет, берутся настройки по умолчанию
-            applySettings(DEFAULTS, true);
-        }
-    }, []);
+        if(needRebuild)
+            resetHandler();
+
+    };
 
     const handleReset = () => {
         localStorage.removeItem('forestSim_settings');
-
         applySettings(DEFAULTS);
-
-        if (setTickIntervalHandler) {
-            setTickIntervalHandler(DEFAULTS.tickInterval);
-        }
     };
+
+    // единожды обновляем состояние параметров для UI компонентов
+    useEffect(()=>{
+        setValues(getSettings());       
+    }, []);
 
     return (
         <Panel title='Параметры симуляции' color="#79c0ff"

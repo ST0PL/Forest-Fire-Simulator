@@ -11,31 +11,9 @@ import DataTable from './Components/data-table';
 import PropertiesBlock from './Components/properties-block';
 import StatisticBlock from './Components/statistic-block';
 import EnvironmentIndicators from './Components/env-indicators';
-
-
+import { initSettings } from './Components/settings-panel/SettingsHelper';
 
 export default function App() {
-
-  const forestRef = useRef(new ForestController(SETTINGS.FIELD.WIDTH, SETTINGS.FIELD.HEIGHT));
-
-  const [cells, setCells] = useState(forestRef.current.getCells());
-  const [stats, setStats] = useState(forestRef.current.getStats());
-  const [isRunning, setIsRunning] = useState(false);
-  const [selectedCell, setSelectedCell] = useState(null);
-  const [season, setSeason] = useState(forestRef.current.getClimate().getSeasonName());
-  const [wind, setWind] = useState(forestRef.current.getClimate().getWindDirectionName());
-  const [weather, setWeather] = useState(forestRef.current.getClimate().getWeatherName());
-  const [airMoisture, setAirMoisture] = useState(forestRef.current.getClimate().getMoisture());
-  const [ticks, setTicks] = useState(0);
-  const [tickInterval, setTickInterval] = useState(SETTINGS.TIME.TICK_INTERVAL_MS);
-
-  useEffect(() => {
-    let timer;
-    if (isRunning) {
-      timer = setInterval(handleStep, tickInterval);
-    }
-    return () => clearInterval(timer);
-  }, [isRunning, selectedCell, tickInterval]);
 
   const handleStep = () => {
       setSeason(forestRef.current.getClimate().getSeasonName());
@@ -53,7 +31,7 @@ export default function App() {
     setSelectedCell(selectedCell ? forestRef.current.getCells()[selectedCell.y][selectedCell.x]  :null);
   }
 
-  const handleReset = () => {
+  const handleSetup = () => {
       forestRef.current = new ForestController(SETTINGS.FIELD.WIDTH, SETTINGS.FIELD.HEIGHT);
       setSeason(forestRef.current.getClimate().getSeasonName());
       setWind(forestRef.current.getClimate().getWindDirectionName());
@@ -63,14 +41,41 @@ export default function App() {
       refreshGrid();
   };
 
-  return (
+  const forestRef = useRef(null);
+
+  const [cells, setCells] = useState(null);
+  const [stats, setStats] = useState(null);
+  const [isRunning, setIsRunning] = useState(false);
+  const [selectedCell, setSelectedCell] = useState(null);
+  const [season, setSeason] = useState(null);
+  const [wind, setWind] = useState(null);
+  const [weather, setWeather] = useState(null);
+  const [airMoisture, setAirMoisture] = useState(0);
+  const [ticks, setTicks] = useState(0);
+  const [tickInterval, setTickInterval] = useState(0);
+
+  useEffect(() => {
+    let timer;
+    if (isRunning) {
+      timer = setInterval(handleStep, tickInterval);
+    }
+    return () => clearInterval(timer);
+  }, [isRunning, selectedCell, tickInterval]);
+
+  // инициализация проводится единожды
+  useEffect(() => {
+    initSettings(handleSetup, setIsRunning, setTickInterval);
+  }, []);
+  
+
+  return cells === null ? null : (
     <>
     <Header/>
 
     <div style={ { display: 'flex', fontFamily: 'monospace', backgroundColor: '#0d1117', color: '#fff', minHeight: '100vh' } }>
 
       <div style={ { display: 'flex', flexDirection: 'column', gap: '10px', margin: '10px 10px' } }>
-        <SettingsPanel resetHandler={handleReset}
+        <SettingsPanel resetHandler={handleSetup}
                        setIsRunningHandler={setIsRunning}
                        setTickIntervalHandler={setTickInterval} />
       </div>
@@ -90,7 +95,7 @@ export default function App() {
 
 
         <ControlPanel forestRef={forestRef}
-                      resetHandler={handleReset}
+                      resetHandler={handleSetup}
                       stepHandler={handleStep}
                       setSeasonHandler={setSeason}
                       setTicksHandler={setTicks}
